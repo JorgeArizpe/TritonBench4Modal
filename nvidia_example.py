@@ -6,7 +6,7 @@ stream = True
 
 
 headers = {
-  "Authorization": "Bearer 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",
+  "Authorization": "Bearer ${NVIDIA_API_KEY}",
   "Accept": "text/event-stream" if stream else "application/json"
 }
 
