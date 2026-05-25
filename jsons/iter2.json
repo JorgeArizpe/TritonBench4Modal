@@ -1,0 +1,3287 @@
+{
+  "artifacts_subdir": "nvidia_iterative_runs/20260521-201300/iter_02",
+  "feedback_path": "nvidia_iterative_runs/20260521-201300/iter_02/results/per_file_feedback.json",
+  "iteration": 2,
+  "phase1_call_acc": {
+    "passed": 70,
+    "rate": 42.17
+  },
+  "phase2_exec_acc": {
+    "passed": 69,
+    "rate": 41.57
+  },
+  "phase3_efficiency": {
+    "accepted_results": 52,
+    "attempted_results": 69,
+    "computed_mean_speedup_vs_pytorch": 108.5482,
+    "computed_results": 66,
+    "considered_results": 69,
+    "fresh_attempted_results": 69,
+    "per_file": {
+      "abs.py": {
+        "alignment": "same_length",
+        "file": "abs.py",
+        "generated_ms_sum": 9.355328,
+        "golden_json": "abs.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.348608,
+        "result_json": "abs.json",
+        "speedup_vs_pytorch": 0.1442,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.65424,
+            "input": "[[134217728]]",
+            "reference_ms": 0.617472,
+            "speedup_vs_pytorch": 0.1327
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.33152,
+            "input": "[[67108864]]",
+            "reference_ms": 0.314368,
+            "speedup_vs_pytorch": 0.1348
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.167648,
+            "input": "[[33554432]]",
+            "reference_ms": 0.161792,
+            "speedup_vs_pytorch": 0.1386
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.585088,
+            "input": "[[16777216]]",
+            "reference_ms": 0.08704,
+            "speedup_vs_pytorch": 0.1488
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.29408,
+            "input": "[[8388608]]",
+            "reference_ms": 0.048128,
+            "speedup_vs_pytorch": 0.1637
+          }
+        ]
+      },
+      "add.py": {
+        "alignment": "same_length",
+        "file": "add.py",
+        "generated_ms_sum": 0.024128,
+        "golden_json": "add.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.943552,
+        "result_json": "add.json",
+        "speedup_vs_pytorch": 80.5517,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.001888,
+            "input": "[[4096], [4096]]",
+            "reference_ms": 0.007168,
+            "speedup_vs_pytorch": 3.7966
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.001568,
+            "input": "[[8192], [8192]]",
+            "reference_ms": 0.007168,
+            "speedup_vs_pytorch": 4.5714
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.001536,
+            "input": "[[65536], [65536]]",
+            "reference_ms": 0.007168,
+            "speedup_vs_pytorch": 4.6667
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.001472,
+            "input": "[[16384], [16384]]",
+            "reference_ms": 0.007168,
+            "speedup_vs_pytorch": 4.8696
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.001408,
+            "input": "[[32768], [32768]]",
+            "reference_ms": 0.007168,
+            "speedup_vs_pytorch": 5.0909
+          }
+        ]
+      },
+      "add_mean.py": {
+        "alignment": "same_length",
+        "file": "add_mean.py",
+        "generated_ms_sum": 26.397056,
+        "golden_json": "add_mean.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 4.018176,
+        "result_json": "add_mean.json",
+        "speedup_vs_pytorch": 0.1522,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 13.102624,
+            "input": "[[134217728], [134217728]]",
+            "reference_ms": 1.850368,
+            "speedup_vs_pytorch": 0.1412
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 6.555344,
+            "input": "[[67108864], [67108864]]",
+            "reference_ms": 0.955392,
+            "speedup_vs_pytorch": 0.1457
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 3.295744,
+            "input": "[[33554432], [33554432]]",
+            "reference_ms": 0.489472,
+            "speedup_vs_pytorch": 0.1485
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 1.660928,
+            "input": "[[16777216], [16777216]]",
+            "reference_ms": 0.263168,
+            "speedup_vs_pytorch": 0.1584
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.432128,
+            "input": "[[4194304], [4194304]]",
+            "reference_ms": 0.075776,
+            "speedup_vs_pytorch": 0.1754
+          }
+        ]
+      },
+      "addmm.py": {
+        "alignment": "same_length",
+        "file": "addmm.py",
+        "generated_ms_sum": 0.04848,
+        "golden_json": "addmm.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 31,
+        "reference_ms_sum": 5.627904,
+        "result_json": "addmm.json",
+        "speedup_vs_pytorch": 116.0871,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.002016,
+            "input": "[[256, 256], [256, 256], [256, 256]]",
+            "reference_ms": 0.014336,
+            "speedup_vs_pytorch": 7.1111
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.001408,
+            "input": "[[384, 384], [384, 384], [384, 384]]",
+            "reference_ms": 0.014336,
+            "speedup_vs_pytorch": 10.1818
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.001472,
+            "input": "[[512, 512], [512, 512], [512, 512]]",
+            "reference_ms": 0.01536,
+            "speedup_vs_pytorch": 10.4348
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.001472,
+            "input": "[[640, 640], [640, 640], [640, 640]]",
+            "reference_ms": 0.018432,
+            "speedup_vs_pytorch": 12.5217
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.001456,
+            "input": "[[768, 768], [768, 768], [768, 768]]",
+            "reference_ms": 0.021504,
+            "speedup_vs_pytorch": 14.7692
+          }
+        ]
+      },
+      "argmax.py": {
+        "alignment": "same_length",
+        "file": "argmax.py",
+        "generated_ms_sum": 8.97232,
+        "golden_json": "argmax.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 18,
+        "reference_ms_sum": 2.229248,
+        "result_json": "argmax.json",
+        "speedup_vs_pytorch": 0.2485,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 17,
+            "generated_ms": 4.403584,
+            "input": "[[536870912]]",
+            "reference_ms": 0.929792,
+            "speedup_vs_pytorch": 0.2111
+          },
+          {
+            "case_index": 16,
+            "generated_ms": 2.172432,
+            "input": "[[268435456]]",
+            "reference_ms": 0.482304,
+            "speedup_vs_pytorch": 0.222
+          },
+          {
+            "case_index": 15,
+            "generated_ms": 1.083904,
+            "input": "[[134217728]]",
+            "reference_ms": 0.270336,
+            "speedup_vs_pytorch": 0.2494
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 0.55296,
+            "input": "[[67108864]]",
+            "reference_ms": 0.156672,
+            "speedup_vs_pytorch": 0.2833
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 0.301056,
+            "input": "[[33554432]]",
+            "reference_ms": 0.086016,
+            "speedup_vs_pytorch": 0.2857
+          }
+        ]
+      },
+      "autocast.py": {
+        "alignment": "same_length",
+        "file": "autocast.py",
+        "generated_ms_sum": 50.16128,
+        "golden_json": "autocast.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 31,
+        "reference_ms_sum": 7.037952,
+        "result_json": "autocast.json",
+        "speedup_vs_pytorch": 0.1403,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 29,
+            "generated_ms": 5.935072,
+            "input": "[[3968, 3968], [3968, 3968]]",
+            "reference_ms": 0.671744,
+            "speedup_vs_pytorch": 0.1132
+          },
+          {
+            "case_index": 30,
+            "generated_ms": 6.12448,
+            "input": "[[4096, 4096], [4096, 4096]]",
+            "reference_ms": 0.705536,
+            "speedup_vs_pytorch": 0.1152
+          },
+          {
+            "case_index": 27,
+            "generated_ms": 4.599472,
+            "input": "[[3712, 3712], [3712, 3712]]",
+            "reference_ms": 0.556032,
+            "speedup_vs_pytorch": 0.1209
+          },
+          {
+            "case_index": 23,
+            "generated_ms": 2.999616,
+            "input": "[[3200, 3200], [3200, 3200]]",
+            "reference_ms": 0.366592,
+            "speedup_vs_pytorch": 0.1222
+          },
+          {
+            "case_index": 26,
+            "generated_ms": 3.964896,
+            "input": "[[3584, 3584], [3584, 3584]]",
+            "reference_ms": 0.487424,
+            "speedup_vs_pytorch": 0.1229
+          }
+        ]
+      },
+      "bitwise_and_binomial.py": {
+        "alignment": "input_key",
+        "file": "bitwise_and_binomial.py",
+        "generated_ms_sum": 0.147008,
+        "golden_json": "bitwise_and_binomial.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 8,
+        "reference_ms_sum": 1.342464,
+        "result_json": "bitwise_and_binomial.json",
+        "speedup_vs_pytorch": 9.1319,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 7,
+            "generated_ms": 0.06112,
+            "input": "[[524288], [524288], [], [524288]]",
+            "reference_ms": 0.239616,
+            "speedup_vs_pytorch": 3.9204
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 0.027872,
+            "input": "[[262144], [262144], [], [262144]]",
+            "reference_ms": 0.1792,
+            "speedup_vs_pytorch": 6.4294
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.015072,
+            "input": "[[131072], [131072], [], [131072]]",
+            "reference_ms": 0.166912,
+            "speedup_vs_pytorch": 11.0743
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.01024,
+            "input": "[[4096], [4096], [], [4096]]",
+            "reference_ms": 0.147456,
+            "speedup_vs_pytorch": 14.4
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.010784,
+            "input": "[[65536], [65536], [], [65536]]",
+            "reference_ms": 0.161792,
+            "speedup_vs_pytorch": 15.003
+          }
+        ]
+      },
+      "broadcast_tensors.py": {
+        "alignment": "same_length",
+        "file": "broadcast_tensors.py",
+        "generated_ms_sum": 0.022112,
+        "golden_json": "broadcast_tensors.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 14,
+        "reference_ms_sum": 0.044032,
+        "result_json": "broadcast_tensors.json",
+        "speedup_vs_pytorch": 1.9913,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 4,
+            "generated_ms": 0.001664,
+            "input": "[[1, 16384], [16384, 1]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 1.8462
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.001664,
+            "input": "[[1, 32768], [32768, 1]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 1.8462
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.001664,
+            "input": "[[1, 4194304], [4194304, 1]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 1.8462
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.001568,
+            "input": "[[1, 4096], [4096, 1]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 1.9592
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 0.001568,
+            "input": "[[1, 65536], [65536, 1]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 1.9592
+          }
+        ]
+      },
+      "conv2d.py": {
+        "alignment": "same_length",
+        "file": "conv2d.py",
+        "generated_ms_sum": 3.481616,
+        "golden_json": "conv2d.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 7,
+        "reference_ms_sum": 9.43616,
+        "result_json": "conv2d.json",
+        "speedup_vs_pytorch": 2.7103,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 4,
+            "generated_ms": 0.168736,
+            "input": "[[32, 256, 16, 16], [512, 256, 3, 3], [512]]",
+            "reference_ms": 0.198656,
+            "speedup_vs_pytorch": 1.1773
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.656832,
+            "input": "[[64, 512, 16, 16], [1024, 512, 3, 3], [1024]]",
+            "reference_ms": 1.101824,
+            "speedup_vs_pytorch": 1.6775
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.026432,
+            "input": "[[16, 128, 16, 16], [256, 128, 3, 3], [256]]",
+            "reference_ms": 0.06144,
+            "speedup_vs_pytorch": 2.3245
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 2.607824,
+            "input": "[[128, 1024, 16, 16], [2048, 1024, 3, 3], [2048]]",
+            "reference_ms": 7.99232,
+            "speedup_vs_pytorch": 3.0647
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.009664,
+            "input": "[[8, 64, 16, 16], [128, 64, 3, 3], [128]]",
+            "reference_ms": 0.032768,
+            "speedup_vs_pytorch": 3.3907
+          }
+        ]
+      },
+      "cos_signbit.py": {
+        "alignment": "same_length",
+        "file": "cos_signbit.py",
+        "generated_ms_sum": 0.025152,
+        "golden_json": "cos_signbit.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 16,
+        "reference_ms_sum": 2.202624,
+        "result_json": "cos_signbit.json",
+        "speedup_vs_pytorch": 87.5725,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.002016,
+            "input": "[[4096]]",
+            "reference_ms": 0.011264,
+            "speedup_vs_pytorch": 5.5873
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.001664,
+            "input": "[[32768]]",
+            "reference_ms": 0.01024,
+            "speedup_vs_pytorch": 6.1538
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.0016,
+            "input": "[[16384]]",
+            "reference_ms": 0.01024,
+            "speedup_vs_pytorch": 6.4
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.001568,
+            "input": "[[8192]]",
+            "reference_ms": 0.01024,
+            "speedup_vs_pytorch": 6.5306
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.001536,
+            "input": "[[65536]]",
+            "reference_ms": 0.01024,
+            "speedup_vs_pytorch": 6.6667
+          }
+        ]
+      },
+      "determinant_via_qr.py": {
+        "alignment": "same_length",
+        "file": "determinant_via_qr.py",
+        "generated_ms_sum": 1.470848,
+        "golden_json": "determinant_via_qr.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 10,
+        "reference_ms_sum": 365.291023,
+        "result_json": "determinant_via_qr.json",
+        "speedup_vs_pytorch": 248.354,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.007808,
+            "input": "[[16, 16]]",
+            "reference_ms": 0.172032,
+            "speedup_vs_pytorch": 22.0328
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.006176,
+            "input": "[[32, 32]]",
+            "reference_ms": 0.244736,
+            "speedup_vs_pytorch": 39.6269
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.00896,
+            "input": "[[64, 64]]",
+            "reference_ms": 0.447488,
+            "speedup_vs_pytorch": 49.9429
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.025472,
+            "input": "[[256, 256]]",
+            "reference_ms": 1.575936,
+            "speedup_vs_pytorch": 61.8693
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.014304,
+            "input": "[[128, 128]]",
+            "reference_ms": 0.999424,
+            "speedup_vs_pytorch": 69.8702
+          }
+        ]
+      },
+      "div.py": {
+        "alignment": "same_length",
+        "file": "div.py",
+        "generated_ms_sum": 22.345744,
+        "golden_json": "div.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.9456,
+        "result_json": "div.json",
+        "speedup_vs_pytorch": 0.0871,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 11.121984,
+            "input": "[[134217728], [134217728]]",
+            "reference_ms": 0.909312,
+            "speedup_vs_pytorch": 0.0818
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 5.582336,
+            "input": "[[67108864], [67108864]]",
+            "reference_ms": 0.459776,
+            "speedup_vs_pytorch": 0.0824
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 2.796848,
+            "input": "[[33554432], [33554432]]",
+            "reference_ms": 0.236544,
+            "speedup_vs_pytorch": 0.0846
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 1.404672,
+            "input": "[[16777216], [16777216]]",
+            "reference_ms": 0.124928,
+            "speedup_vs_pytorch": 0.0889
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.70416,
+            "input": "[[8388608], [8388608]]",
+            "reference_ms": 0.068608,
+            "speedup_vs_pytorch": 0.0974
+          }
+        ]
+      },
+      "eig.py": {
+        "alignment": "same_length",
+        "file": "eig.py",
+        "generated_ms_sum": 902.407575,
+        "golden_json": "eig.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 5,
+        "reference_ms_sum": 804.46476,
+        "result_json": "eig.json",
+        "speedup_vs_pytorch": 0.8915,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 4,
+            "generated_ms": 697.08783,
+            "input": "[[1024, 1024]]",
+            "reference_ms": 611.193909,
+            "speedup_vs_pytorch": 0.8768
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 1.671488,
+            "input": "[[64, 64]]",
+            "reference_ms": 1.4848,
+            "speedup_vs_pytorch": 0.8883
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 8.453824,
+            "input": "[[128, 128]]",
+            "reference_ms": 7.700288,
+            "speedup_vs_pytorch": 0.9109
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 169.229889,
+            "input": "[[512, 512]]",
+            "reference_ms": 155.430756,
+            "speedup_vs_pytorch": 0.9185
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 25.964544,
+            "input": "[[256, 256]]",
+            "reference_ms": 28.655008,
+            "speedup_vs_pytorch": 1.1036
+          }
+        ]
+      },
+      "erfc_sqrt.py": {
+        "alignment": "same_length",
+        "file": "erfc_sqrt.py",
+        "generated_ms_sum": 14.9392,
+        "golden_json": "erfc_sqrt.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 4.988928,
+        "result_json": "erfc_sqrt.json",
+        "speedup_vs_pytorch": 0.3339,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 7.46704,
+            "input": "[[134217728]]",
+            "reference_ms": 2.3808,
+            "speedup_vs_pytorch": 0.3188
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 3.716896,
+            "input": "[[67108864]]",
+            "reference_ms": 1.2032,
+            "speedup_vs_pytorch": 0.3237
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.863632,
+            "input": "[[33554432]]",
+            "reference_ms": 0.612352,
+            "speedup_vs_pytorch": 0.3286
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.933776,
+            "input": "[[16777216]]",
+            "reference_ms": 0.318464,
+            "speedup_vs_pytorch": 0.341
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 0.118528,
+            "input": "[[2097152]]",
+            "reference_ms": 0.04096,
+            "speedup_vs_pytorch": 0.3456
+          }
+        ]
+      },
+      "exp_sqrt.py": {
+        "alignment": "same_length",
+        "file": "exp_sqrt.py",
+        "generated_ms_sum": 9.3388,
+        "golden_json": "exp_sqrt.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 2.594816,
+        "result_json": "exp_sqrt.json",
+        "speedup_vs_pytorch": 0.2779,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.644384,
+            "input": "[[134217728]]",
+            "reference_ms": 1.227776,
+            "speedup_vs_pytorch": 0.2644
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.326528,
+            "input": "[[67108864]]",
+            "reference_ms": 0.621568,
+            "speedup_vs_pytorch": 0.2672
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.16768,
+            "input": "[[33554432]]",
+            "reference_ms": 0.318464,
+            "speedup_vs_pytorch": 0.2727
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.14784,
+            "input": "[[4194304]]",
+            "reference_ms": 0.041984,
+            "speedup_vs_pytorch": 0.284
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.585056,
+            "input": "[[16777216]]",
+            "reference_ms": 0.166912,
+            "speedup_vs_pytorch": 0.2853
+          }
+        ]
+      },
+      "fused_cholesky_solve.py": {
+        "alignment": "same_length",
+        "file": "fused_cholesky_solve.py",
+        "generated_ms_sum": 2.455456,
+        "golden_json": "fused_cholesky_solve.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 8,
+        "reference_ms_sum": 6.707008,
+        "result_json": "fused_cholesky_solve.json",
+        "speedup_vs_pytorch": 2.7315,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.197952,
+            "input": "[[4, 4], [4, 1]]",
+            "reference_ms": 0.27872,
+            "speedup_vs_pytorch": 1.408
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.186368,
+            "input": "[[8, 8], [8, 1]]",
+            "reference_ms": 0.2688,
+            "speedup_vs_pytorch": 1.4423
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.190144,
+            "input": "[[16, 16], [16, 1]]",
+            "reference_ms": 0.313872,
+            "speedup_vs_pytorch": 1.6507
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.18432,
+            "input": "[[32, 32], [32, 1]]",
+            "reference_ms": 0.379152,
+            "speedup_vs_pytorch": 2.057
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.19952,
+            "input": "[[64, 64], [64, 1]]",
+            "reference_ms": 0.47776,
+            "speedup_vs_pytorch": 2.3945
+          }
+        ]
+      },
+      "fused_cosine_embedding_loss_with_normalization.py": {
+        "alignment": "same_length",
+        "file": "fused_cosine_embedding_loss_with_normalization.py",
+        "generated_ms_sum": 35.855536,
+        "golden_json": "fused_cosine_embedding_loss_with_normalization.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 9,
+        "reference_ms_sum": 13.55776,
+        "result_json": "fused_cosine_embedding_loss_with_normalization.json",
+        "speedup_vs_pytorch": 0.3781,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 8,
+            "generated_ms": 18.626448,
+            "input": "[[1048576, 256], [1048576, 256], [1048576]]",
+            "reference_ms": 6.550528,
+            "speedup_vs_pytorch": 0.3517
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 9.072832,
+            "input": "[[524288, 256], [524288, 256], [524288]]",
+            "reference_ms": 3.315712,
+            "speedup_vs_pytorch": 0.3655
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 4.33056,
+            "input": "[[262144, 256], [262144, 256], [262144]]",
+            "reference_ms": 1.697792,
+            "speedup_vs_pytorch": 0.392
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 2.014464,
+            "input": "[[131072, 256], [131072, 256], [131072]]",
+            "reference_ms": 0.89088,
+            "speedup_vs_pytorch": 0.4422
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.944128,
+            "input": "[[65536, 256], [65536, 256], [65536]]",
+            "reference_ms": 0.490496,
+            "speedup_vs_pytorch": 0.5195
+          }
+        ]
+      },
+      "fused_cross_entropy_log_softmax.py": {
+        "alignment": "same_length",
+        "file": "fused_cross_entropy_log_softmax.py",
+        "generated_ms_sum": 108.059088,
+        "golden_json": "fused_cross_entropy_log_softmax.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 12,
+        "reference_ms_sum": 558.748152,
+        "result_json": "fused_cross_entropy_log_softmax.json",
+        "speedup_vs_pytorch": 5.1708,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.114688,
+            "input": "[[4096, 128], [4096]]",
+            "reference_ms": 0.132096,
+            "speedup_vs_pytorch": 1.1518
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.117552,
+            "input": "[[8192, 128], [8192]]",
+            "reference_ms": 0.208896,
+            "speedup_vs_pytorch": 1.7771
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.161536,
+            "input": "[[16384, 128], [16384]]",
+            "reference_ms": 0.405504,
+            "speedup_vs_pytorch": 2.5103
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.249696,
+            "input": "[[32768, 128], [32768]]",
+            "reference_ms": 0.833536,
+            "speedup_vs_pytorch": 3.3382
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.421888,
+            "input": "[[65536, 128], [65536]]",
+            "reference_ms": 2.000896,
+            "speedup_vs_pytorch": 4.7427
+          }
+        ]
+      },
+      "fused_fractional_max_pool2d_with_relu.py": {
+        "alignment": "same_length",
+        "file": "fused_fractional_max_pool2d_with_relu.py",
+        "generated_ms_sum": 36.510465,
+        "golden_json": "fused_fractional_max_pool2d_with_relu.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 9,
+        "reference_ms_sum": 11.865088,
+        "result_json": "fused_fractional_max_pool2d_with_relu.json",
+        "speedup_vs_pytorch": 0.325,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 8,
+            "generated_ms": 27.349537,
+            "input": "[[16, 3, 4096, 4096]]",
+            "reference_ms": 8.809472,
+            "speedup_vs_pytorch": 0.3221
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 6.848512,
+            "input": "[[16, 3, 2048, 2048]]",
+            "reference_ms": 2.20672,
+            "speedup_vs_pytorch": 0.3222
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 1.719232,
+            "input": "[[16, 3, 1024, 1024]]",
+            "reference_ms": 0.56832,
+            "speedup_vs_pytorch": 0.3306
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.432128,
+            "input": "[[16, 3, 512, 512]]",
+            "reference_ms": 0.157696,
+            "speedup_vs_pytorch": 0.3649
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.109632,
+            "input": "[[16, 3, 256, 256]]",
+            "reference_ms": 0.050176,
+            "speedup_vs_pytorch": 0.4577
+          }
+        ]
+      },
+      "fused_hardshrink_dropout.py": {
+        "alignment": "same_length",
+        "file": "fused_hardshrink_dropout.py",
+        "generated_ms_sum": 9.198864,
+        "golden_json": "fused_hardshrink_dropout.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 2.947072,
+        "result_json": "fused_hardshrink_dropout.json",
+        "speedup_vs_pytorch": 0.3204,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.555456,
+            "input": "[[134217728]]",
+            "reference_ms": 1.394688,
+            "speedup_vs_pytorch": 0.3062
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.291712,
+            "input": "[[67108864]]",
+            "reference_ms": 0.704512,
+            "speedup_vs_pytorch": 0.3074
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.154272,
+            "input": "[[33554432]]",
+            "reference_ms": 0.361472,
+            "speedup_vs_pytorch": 0.3132
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.581248,
+            "input": "[[16777216]]",
+            "reference_ms": 0.188416,
+            "speedup_vs_pytorch": 0.3242
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.147712,
+            "input": "[[4194304]]",
+            "reference_ms": 0.050176,
+            "speedup_vs_pytorch": 0.3397
+          }
+        ]
+      },
+      "fused_hardsigmoid_batch_norm.py": {
+        "alignment": "same_length",
+        "file": "fused_hardsigmoid_batch_norm.py",
+        "generated_ms_sum": 9.257312,
+        "golden_json": "fused_hardsigmoid_batch_norm.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 6.610944,
+        "result_json": "fused_hardsigmoid_batch_norm.json",
+        "speedup_vs_pytorch": 0.7141,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 12,
+            "generated_ms": 0.57952,
+            "input": "[[1, 64, 512, 512], [64], [64], [64], [64], false, 0.1, 1e-05, false]",
+            "reference_ms": 0.407552,
+            "speedup_vs_pytorch": 0.7033
+          },
+          {
+            "case_index": 15,
+            "generated_ms": 4.60832,
+            "input": "[[1, 64, 1448, 1449], [64], [64], [64], [64], false, 0.1, 1e-05, false]",
+            "reference_ms": 3.245056,
+            "speedup_vs_pytorch": 0.7042
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.29376,
+            "input": "[[1, 64, 1024, 1024], [64], [64], [64], [64], false, 0.1, 1e-05, false]",
+            "reference_ms": 1.616896,
+            "speedup_vs_pytorch": 0.7049
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.146848,
+            "input": "[[1, 64, 256, 256], [64], [64], [64], [64], false, 0.1, 1e-05, false]",
+            "reference_ms": 0.104448,
+            "speedup_vs_pytorch": 0.7113
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.155776,
+            "input": "[[1, 64, 724, 725], [64], [64], [64], [64], false, 0.1, 1e-05, false]",
+            "reference_ms": 0.82432,
+            "speedup_vs_pytorch": 0.7132
+          }
+        ]
+      },
+      "fused_index_select_eq.py": {
+        "alignment": "same_length",
+        "file": "fused_index_select_eq.py",
+        "generated_ms_sum": 0.962592,
+        "golden_json": "fused_index_select_eq.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 12,
+        "reference_ms_sum": 4.412416,
+        "result_json": "fused_index_select_eq.json",
+        "speedup_vs_pytorch": 4.5839,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.0064,
+            "input": "[[4096, 128], 0, [512], 0.0, 65536]",
+            "reference_ms": 0.014336,
+            "speedup_vs_pytorch": 2.24
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.004672,
+            "input": "[[8192, 128], 0, [1024], 0.0, 131072]",
+            "reference_ms": 0.013312,
+            "speedup_vs_pytorch": 2.8493
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.004928,
+            "input": "[[16384, 128], 0, [2048], 0.0, 262144]",
+            "reference_ms": 0.014336,
+            "speedup_vs_pytorch": 2.9091
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.005504,
+            "input": "[[32768, 128], 0, [4096], 0.0, 524288]",
+            "reference_ms": 0.018432,
+            "speedup_vs_pytorch": 3.3488
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.006688,
+            "input": "[[65536, 128], 0, [8192], 0.0, 1048576]",
+            "reference_ms": 0.026624,
+            "speedup_vs_pytorch": 3.9809
+          }
+        ]
+      },
+      "fused_instance_norm_selu_conv2d.py": {
+        "file": "fused_instance_norm_selu_conv2d.py",
+        "generated_ms_sum": null,
+        "golden_json": null,
+        "message": "skipped because this batch killed a previous evaluator container before it could complete",
+        "num_cases": 0,
+        "reference_ms_sum": null,
+        "result_json": null,
+        "speedup_vs_pytorch": null,
+        "status": "skipped_after_crash"
+      },
+      "fused_lu_solve.py": {
+        "alignment": "same_length",
+        "file": "fused_lu_solve.py",
+        "generated_ms_sum": 43.405632,
+        "golden_json": "fused_lu_solve.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 5,
+        "reference_ms_sum": 66.164816,
+        "result_json": "fused_lu_solve.json",
+        "speedup_vs_pytorch": 1.5243,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 1.21136,
+            "input": "[[256, 256], [256]]",
+            "reference_ms": 1.113616,
+            "speedup_vs_pytorch": 0.9193
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 29.107136,
+            "input": "[[4096, 4096], [4096]]",
+            "reference_ms": 42.904896,
+            "speedup_vs_pytorch": 1.474
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 1.574208,
+            "input": "[[512, 512], [512]]",
+            "reference_ms": 2.481248,
+            "speedup_vs_pytorch": 1.5762
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 3.20648,
+            "input": "[[1024, 1024], [1024]]",
+            "reference_ms": 5.4432,
+            "speedup_vs_pytorch": 1.6976
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 8.306448,
+            "input": "[[2048, 2048], [2048]]",
+            "reference_ms": 14.221856,
+            "speedup_vs_pytorch": 1.7121
+          }
+        ]
+      },
+      "fused_mul_add_logsoftmax_dropout_bmm.py": {
+        "alignment": "same_length",
+        "file": "fused_mul_add_logsoftmax_dropout_bmm.py",
+        "generated_ms_sum": 1427.619372,
+        "golden_json": "fused_mul_add_logsoftmax_dropout_bmm.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 15,
+        "reference_ms_sum": 288.539649,
+        "result_json": "fused_mul_add_logsoftmax_dropout_bmm.json",
+        "speedup_vs_pytorch": 0.2021,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 14,
+            "generated_ms": 265.586731,
+            "input": "[[32, 2432, 2432], [32, 2432, 2432], [32, 2432, 2432], [32, 2432, 2432]]",
+            "reference_ms": 52.993538,
+            "speedup_vs_pytorch": 0.1995
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 226.80188,
+            "input": "[[32, 2304, 2304], [32, 2304, 2304], [32, 2304, 2304], [32, 2304, 2304]]",
+            "reference_ms": 45.286911,
+            "speedup_vs_pytorch": 0.1997
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 192.903839,
+            "input": "[[32, 2176, 2176], [32, 2176, 2176], [32, 2176, 2176], [32, 2176, 2176]]",
+            "reference_ms": 38.540287,
+            "speedup_vs_pytorch": 0.1998
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 162.224319,
+            "input": "[[32, 2048, 2048], [32, 2048, 2048], [32, 2048, 2048], [32, 2048, 2048]]",
+            "reference_ms": 32.42701,
+            "speedup_vs_pytorch": 0.1999
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 135.385056,
+            "input": "[[32, 1920, 1920], [32, 1920, 1920], [32, 1920, 1920], [32, 1920, 1920]]",
+            "reference_ms": 27.087872,
+            "speedup_vs_pytorch": 0.2001
+          }
+        ]
+      },
+      "fused_mv_logsoftmax_dropout.py": {
+        "alignment": "same_length",
+        "file": "fused_mv_logsoftmax_dropout.py",
+        "generated_ms_sum": 1.847552,
+        "golden_json": "fused_mv_logsoftmax_dropout.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 31,
+        "reference_ms_sum": 0.929792,
+        "result_json": "fused_mv_logsoftmax_dropout.json",
+        "speedup_vs_pytorch": 0.5033,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 29,
+            "generated_ms": 0.136992,
+            "input": "[[3968, 3968], [3968]]",
+            "reference_ms": 0.048128,
+            "speedup_vs_pytorch": 0.3513
+          },
+          {
+            "case_index": 30,
+            "generated_ms": 0.142032,
+            "input": "[[4096, 4096], [4096]]",
+            "reference_ms": 0.050176,
+            "speedup_vs_pytorch": 0.3533
+          },
+          {
+            "case_index": 28,
+            "generated_ms": 0.130336,
+            "input": "[[3840, 3840], [3840]]",
+            "reference_ms": 0.04608,
+            "speedup_vs_pytorch": 0.3535
+          },
+          {
+            "case_index": 27,
+            "generated_ms": 0.122848,
+            "input": "[[3712, 3712], [3712]]",
+            "reference_ms": 0.044032,
+            "speedup_vs_pytorch": 0.3584
+          },
+          {
+            "case_index": 26,
+            "generated_ms": 0.113824,
+            "input": "[[3584, 3584], [3584]]",
+            "reference_ms": 0.043008,
+            "speedup_vs_pytorch": 0.3778
+          }
+        ]
+      },
+      "fused_mv_sigmoid_sub.py": {
+        "alignment": "same_length",
+        "file": "fused_mv_sigmoid_sub.py",
+        "generated_ms_sum": 22.748623,
+        "golden_json": "fused_mv_sigmoid_sub.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 10,
+        "reference_ms_sum": 3.579904,
+        "result_json": "fused_mv_sigmoid_sub.json",
+        "speedup_vs_pytorch": 0.1574,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 9,
+            "generated_ms": 16.629711,
+            "input": "[[32768, 32768], [32768], 0.5]",
+            "reference_ms": 2.561024,
+            "speedup_vs_pytorch": 0.154
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 4.210688,
+            "input": "[[16384, 16384], [16384], 0.5]",
+            "reference_ms": 0.66048,
+            "speedup_vs_pytorch": 0.1569
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 1.091712,
+            "input": "[[8192, 8192], [8192], 0.5]",
+            "reference_ms": 0.178176,
+            "speedup_vs_pytorch": 0.1632
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.072416,
+            "input": "[[512, 512], [512], 0.5]",
+            "reference_ms": 0.014336,
+            "speedup_vs_pytorch": 0.198
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.072384,
+            "input": "[[256, 256], [256], 0.5]",
+            "reference_ms": 0.014336,
+            "speedup_vs_pytorch": 0.1981
+          }
+        ]
+      },
+      "fused_qr_solve.py": {
+        "alignment": "same_length",
+        "file": "fused_qr_solve.py",
+        "generated_ms_sum": 321.678014,
+        "golden_json": "fused_qr_solve.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 9,
+        "reference_ms_sum": 177.833777,
+        "result_json": "fused_qr_solve.json",
+        "speedup_vs_pytorch": 0.5528,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 8,
+            "generated_ms": 250.153503,
+            "input": "[[8192, 4096], [8192, 10]]",
+            "reference_ms": 119.74485,
+            "speedup_vs_pytorch": 0.4787
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 49.841343,
+            "input": "[[4096, 2048], [4096, 10]]",
+            "reference_ms": 37.374447,
+            "speedup_vs_pytorch": 0.7499
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 13.00544,
+            "input": "[[2048, 1024], [2048, 10]]",
+            "reference_ms": 11.637168,
+            "speedup_vs_pytorch": 0.8948
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 5.046288,
+            "input": "[[1024, 512], [1024, 10]]",
+            "reference_ms": 4.906432,
+            "speedup_vs_pytorch": 0.9723
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 1.926288,
+            "input": "[[512, 256], [512, 10]]",
+            "reference_ms": 2.050816,
+            "speedup_vs_pytorch": 1.0646
+          }
+        ]
+      },
+      "fused_transformer_block.py": {
+        "alignment": "same_length",
+        "file": "fused_transformer_block.py",
+        "generated_ms_sum": 84.717937,
+        "golden_json": "fused_transformer_block.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 5,
+        "reference_ms_sum": 20.786176,
+        "result_json": "fused_transformer_block.json",
+        "speedup_vs_pytorch": 0.2454,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 4,
+            "generated_ms": 62.941185,
+            "input": "[[8, 128, 4096], [4096, 16384], [16384, 4096], [8, 128, 4096]]",
+            "reference_ms": 15.219712,
+            "speedup_vs_pytorch": 0.2418
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 15.874688,
+            "input": "[[8, 128, 2048], [2048, 8192], [8192, 2048], [8, 128, 2048]]",
+            "reference_ms": 3.9936,
+            "speedup_vs_pytorch": 0.2516
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 4.214688,
+            "input": "[[8, 128, 1024], [1024, 4096], [4096, 1024], [8, 128, 1024]]",
+            "reference_ms": 1.063936,
+            "speedup_vs_pytorch": 0.2524
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 1.24232,
+            "input": "[[8, 128, 512], [512, 2048], [2048, 512], [8, 128, 512]]",
+            "reference_ms": 0.33792,
+            "speedup_vs_pytorch": 0.272
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.445056,
+            "input": "[[8, 128, 256], [256, 1024], [1024, 256], [8, 128, 256]]",
+            "reference_ms": 0.171008,
+            "speedup_vs_pytorch": 0.3842
+          }
+        ]
+      },
+      "gelu.py": {
+        "alignment": "same_length",
+        "file": "gelu.py",
+        "generated_ms_sum": 9.364,
+        "golden_json": "gelu.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.36192,
+        "result_json": "gelu.json",
+        "speedup_vs_pytorch": 0.1454,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.661248,
+            "input": "[[134217728]]",
+            "reference_ms": 0.621568,
+            "speedup_vs_pytorch": 0.1333
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.332192,
+            "input": "[[67108864]]",
+            "reference_ms": 0.316416,
+            "speedup_vs_pytorch": 0.1357
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.167584,
+            "input": "[[33554432]]",
+            "reference_ms": 0.164864,
+            "speedup_vs_pytorch": 0.1412
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.585312,
+            "input": "[[16777216]]",
+            "reference_ms": 0.088064,
+            "speedup_vs_pytorch": 0.1505
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.293984,
+            "input": "[[8388608]]",
+            "reference_ms": 0.049152,
+            "speedup_vs_pytorch": 0.1672
+          }
+        ]
+      },
+      "i0.py": {
+        "alignment": "same_length",
+        "file": "i0.py",
+        "generated_ms_sum": 9.358912,
+        "golden_json": "i0.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 2.17088,
+        "result_json": "i0.json",
+        "speedup_vs_pytorch": 0.232,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.658464,
+            "input": "[[134217728]]",
+            "reference_ms": 1.021952,
+            "speedup_vs_pytorch": 0.2194
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.330624,
+            "input": "[[67108864]]",
+            "reference_ms": 0.516096,
+            "speedup_vs_pytorch": 0.2214
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.16736,
+            "input": "[[33554432]]",
+            "reference_ms": 0.263168,
+            "speedup_vs_pytorch": 0.2254
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.584832,
+            "input": "[[16777216]]",
+            "reference_ms": 0.137216,
+            "speedup_vs_pytorch": 0.2346
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.293952,
+            "input": "[[8388608]]",
+            "reference_ms": 0.073728,
+            "speedup_vs_pytorch": 0.2508
+          }
+        ]
+      },
+      "log.py": {
+        "alignment": "same_length",
+        "file": "log.py",
+        "generated_ms_sum": 8.736704,
+        "golden_json": "log.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.3568,
+        "result_json": "log.json",
+        "speedup_vs_pytorch": 0.1553,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.328128,
+            "input": "[[134217728]]",
+            "reference_ms": 0.617472,
+            "speedup_vs_pytorch": 0.1427
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.172416,
+            "input": "[[67108864]]",
+            "reference_ms": 0.315392,
+            "speedup_vs_pytorch": 0.1452
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.092064,
+            "input": "[[33554432]]",
+            "reference_ms": 0.16384,
+            "speedup_vs_pytorch": 0.15
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.5504,
+            "input": "[[16777216]]",
+            "reference_ms": 0.088064,
+            "speedup_vs_pytorch": 0.16
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.277344,
+            "input": "[[8388608]]",
+            "reference_ms": 0.049152,
+            "speedup_vs_pytorch": 0.1772
+          }
+        ]
+      },
+      "logit.py": {
+        "alignment": "same_length",
+        "file": "logit.py",
+        "generated_ms_sum": 9.315056,
+        "golden_json": "logit.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 4.440064,
+        "result_json": "logit.json",
+        "speedup_vs_pytorch": 0.4767,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.625312,
+            "input": "[[134217728]]",
+            "reference_ms": 2.131968,
+            "speedup_vs_pytorch": 0.4609
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 0.07552,
+            "input": "[[2097152]]",
+            "reference_ms": 0.034816,
+            "speedup_vs_pytorch": 0.461
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.320128,
+            "input": "[[67108864]]",
+            "reference_ms": 1.074176,
+            "speedup_vs_pytorch": 0.463
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.165312,
+            "input": "[[33554432]]",
+            "reference_ms": 0.54784,
+            "speedup_vs_pytorch": 0.4701
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.58512,
+            "input": "[[16777216]]",
+            "reference_ms": 0.283648,
+            "speedup_vs_pytorch": 0.4848
+          }
+        ]
+      },
+      "logspace.py": {
+        "alignment": "same_length",
+        "file": "logspace.py",
+        "generated_ms_sum": 4.614224,
+        "golden_json": "logspace.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 3.213312,
+        "result_json": "logspace.json",
+        "speedup_vs_pytorch": 0.6964,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 2.286016,
+            "input": "[134217728]",
+            "reference_ms": 1.560576,
+            "speedup_vs_pytorch": 0.6827
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 1.144832,
+            "input": "[67108864]",
+            "reference_ms": 0.78336,
+            "speedup_vs_pytorch": 0.6843
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 0.574432,
+            "input": "[33554432]",
+            "reference_ms": 0.395264,
+            "speedup_vs_pytorch": 0.6881
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.288768,
+            "input": "[16777216]",
+            "reference_ms": 0.200704,
+            "speedup_vs_pytorch": 0.695
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.145648,
+            "input": "[8388608]",
+            "reference_ms": 0.103424,
+            "speedup_vs_pytorch": 0.7101
+          }
+        ]
+      },
+      "logsumexp.py": {
+        "alignment": "same_length",
+        "file": "logsumexp.py",
+        "generated_ms_sum": 26.411136,
+        "golden_json": "logsumexp.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 4.62336,
+        "result_json": "logsumexp.json",
+        "speedup_vs_pytorch": 0.1751,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 12.990736,
+            "input": "[[134217728]]",
+            "reference_ms": 1.97632,
+            "speedup_vs_pytorch": 0.1521
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 6.514816,
+            "input": "[[67108864]]",
+            "reference_ms": 1.046528,
+            "speedup_vs_pytorch": 0.1606
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 3.292128,
+            "input": "[[33554432]]",
+            "reference_ms": 0.54272,
+            "speedup_vs_pytorch": 0.1649
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 1.663744,
+            "input": "[[16777216]]",
+            "reference_ms": 0.305152,
+            "speedup_vs_pytorch": 0.1834
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.845824,
+            "input": "[[8388608]]",
+            "reference_ms": 0.173056,
+            "speedup_vs_pytorch": 0.2046
+          }
+        ]
+      },
+      "low_rank_svd_approximation.py": {
+        "alignment": "same_length",
+        "file": "low_rank_svd_approximation.py",
+        "generated_ms_sum": 1282.627141,
+        "golden_json": "low_rank_svd_approximation.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 10,
+        "reference_ms_sum": 650.332166,
+        "result_json": "low_rank_svd_approximation.json",
+        "speedup_vs_pytorch": 0.507,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 9,
+            "generated_ms": 393.800049,
+            "input": "[[1408, 1408], 50]",
+            "reference_ms": 147.353607,
+            "speedup_vs_pytorch": 0.3742
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 255.875076,
+            "input": "[[1280, 1280], 50]",
+            "reference_ms": 116.096512,
+            "speedup_vs_pytorch": 0.4537
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 197.606522,
+            "input": "[[1152, 1152], 50]",
+            "reference_ms": 96.637436,
+            "speedup_vs_pytorch": 0.489
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 150.198486,
+            "input": "[[1024, 1024], 50]",
+            "reference_ms": 79.709183,
+            "speedup_vs_pytorch": 0.5307
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 108.786942,
+            "input": "[[896, 896], 50]",
+            "reference_ms": 65.931267,
+            "speedup_vs_pytorch": 0.6061
+          }
+        ]
+      },
+      "lu.py.py": {
+        "alignment": "same_length",
+        "file": "lu.py.py",
+        "generated_ms_sum": 0.401184,
+        "golden_json": "lu.py.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 11,
+        "reference_ms_sum": 25.517056,
+        "result_json": "lu.py.json",
+        "speedup_vs_pytorch": 63.6044,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 10,
+            "generated_ms": 0.084608,
+            "input": "[[1536, 1536]]",
+            "reference_ms": 4.269056,
+            "speedup_vs_pytorch": 50.4569
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 0.07168,
+            "input": "[[1408, 1408]]",
+            "reference_ms": 3.877888,
+            "speedup_vs_pytorch": 54.1
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 0.060416,
+            "input": "[[1280, 1280]]",
+            "reference_ms": 3.426304,
+            "speedup_vs_pytorch": 56.7119
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 0.04944,
+            "input": "[[1152, 1152]]",
+            "reference_ms": 3.127296,
+            "speedup_vs_pytorch": 63.2544
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 0.039616,
+            "input": "[[1024, 1024]]",
+            "reference_ms": 2.55488,
+            "speedup_vs_pytorch": 64.4911
+          }
+        ]
+      },
+      "matrix_multiply_symmetric.py": {
+        "alignment": "same_length",
+        "file": "matrix_multiply_symmetric.py",
+        "generated_ms_sum": 0.050528,
+        "golden_json": "matrix_multiply_symmetric.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 31,
+        "reference_ms_sum": 12.82048,
+        "result_json": "matrix_multiply_symmetric.json",
+        "speedup_vs_pytorch": 253.7302,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.001888,
+            "input": "[[256, 256], [256, 256], [256, 256], 1.0, 0.5]",
+            "reference_ms": 0.037888,
+            "speedup_vs_pytorch": 20.0678
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.001568,
+            "input": "[[384, 384], [384, 384], [384, 384], 1.0, 0.5]",
+            "reference_ms": 0.036864,
+            "speedup_vs_pytorch": 23.5102
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.001632,
+            "input": "[[512, 512], [512, 512], [512, 512], 1.0, 0.5]",
+            "reference_ms": 0.038912,
+            "speedup_vs_pytorch": 23.8431
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.0016,
+            "input": "[[640, 640], [640, 640], [640, 640], 1.0, 0.5]",
+            "reference_ms": 0.044032,
+            "speedup_vs_pytorch": 27.52
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.0016,
+            "input": "[[768, 768], [768, 768], [768, 768], 1.0, 0.5]",
+            "reference_ms": 0.048128,
+            "speedup_vs_pytorch": 30.08
+          }
+        ]
+      },
+      "matrix_power_eig.py": {
+        "alignment": "same_length",
+        "file": "matrix_power_eig.py",
+        "generated_ms_sum": 9202.768854,
+        "golden_json": "matrix_power_eig.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 12,
+        "reference_ms_sum": 193.471487,
+        "result_json": "matrix_power_eig.json",
+        "speedup_vs_pytorch": 0.021,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 10,
+            "generated_ms": 1911.460449,
+            "input": "[[1536, 1536]]",
+            "reference_ms": 25.06752,
+            "speedup_vs_pytorch": 0.0131
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 2124.114014,
+            "input": "[[1664, 1664]]",
+            "reference_ms": 27.915264,
+            "speedup_vs_pytorch": 0.0131
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 1379.105225,
+            "input": "[[1408, 1408]]",
+            "reference_ms": 22.335999,
+            "speedup_vs_pytorch": 0.0162
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 1118.876343,
+            "input": "[[1280, 1280]]",
+            "reference_ms": 19.74016,
+            "speedup_vs_pytorch": 0.0176
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 743.06366,
+            "input": "[[1024, 1024]]",
+            "reference_ms": 14.12096,
+            "speedup_vs_pytorch": 0.019
+          }
+        ]
+      },
+      "matrix_vector_dot.py": {
+        "alignment": "same_length",
+        "file": "matrix_vector_dot.py",
+        "generated_ms_sum": 2.064032,
+        "golden_json": "matrix_vector_dot.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 10,
+        "reference_ms_sum": 1.951744,
+        "result_json": "matrix_vector_dot.json",
+        "speedup_vs_pytorch": 0.9456,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 6,
+            "generated_ms": 0.1312,
+            "input": "[[4096, 4096], [4096], [4096]]",
+            "reference_ms": 0.058368,
+            "speedup_vs_pytorch": 0.4449
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.069792,
+            "input": "[[2048, 2048], [2048], [2048]]",
+            "reference_ms": 0.032768,
+            "speedup_vs_pytorch": 0.4695
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 0.255616,
+            "input": "[[8192, 8192], [8192], [8192]]",
+            "reference_ms": 0.126976,
+            "speedup_vs_pytorch": 0.4967
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 0.503424,
+            "input": "[[16384, 16384], [16384], [16384]]",
+            "reference_ms": 0.354304,
+            "speedup_vs_pytorch": 0.7038
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.038656,
+            "input": "[[1024, 1024], [1024], [1024]]",
+            "reference_ms": 0.027648,
+            "speedup_vs_pytorch": 0.7152
+          }
+        ]
+      },
+      "min_gelu.py": {
+        "alignment": "same_length",
+        "file": "min_gelu.py",
+        "generated_ms_sum": 13.373072,
+        "golden_json": "min_gelu.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 6.608896,
+        "result_json": "min_gelu.json",
+        "speedup_vs_pytorch": 0.4942,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 6.598176,
+            "input": "[[134217728]]",
+            "reference_ms": 3.089408,
+            "speedup_vs_pytorch": 0.4682
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 3.31088,
+            "input": "[[67108864]]",
+            "reference_ms": 1.585152,
+            "speedup_vs_pytorch": 0.4788
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.671008,
+            "input": "[[33554432]]",
+            "reference_ms": 0.811008,
+            "speedup_vs_pytorch": 0.4853
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.22528,
+            "input": "[[4194304]]",
+            "reference_ms": 0.111616,
+            "speedup_vs_pytorch": 0.4955
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 0.12144,
+            "input": "[[2097152]]",
+            "reference_ms": 0.060416,
+            "speedup_vs_pytorch": 0.4975
+          }
+        ]
+      },
+      "mul.py": {
+        "alignment": "same_length",
+        "file": "mul.py",
+        "generated_ms_sum": 6.446016,
+        "golden_json": "mul.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.053696,
+        "result_json": "mul.json",
+        "speedup_vs_pytorch": 0.1635,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 3.198304,
+            "input": "[[134217728], [134217728]]",
+            "reference_ms": 0.463872,
+            "speedup_vs_pytorch": 0.145
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 1.601536,
+            "input": "[[67108864], [67108864]]",
+            "reference_ms": 0.238592,
+            "speedup_vs_pytorch": 0.149
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 0.79696,
+            "input": "[[33554432], [33554432]]",
+            "reference_ms": 0.125952,
+            "speedup_vs_pytorch": 0.158
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.401472,
+            "input": "[[16777216], [16777216]]",
+            "reference_ms": 0.070656,
+            "speedup_vs_pytorch": 0.176
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.202368,
+            "input": "[[8388608], [8388608]]",
+            "reference_ms": 0.04096,
+            "speedup_vs_pytorch": 0.2024
+          }
+        ]
+      },
+      "ones_like.py": {
+        "alignment": "same_length",
+        "file": "ones_like.py",
+        "generated_ms_sum": 0.059888,
+        "golden_json": "ones_like.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 9,
+        "reference_ms_sum": 0.08192,
+        "result_json": "ones_like.json",
+        "speedup_vs_pytorch": 1.3679,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 7,
+            "generated_ms": 0.011584,
+            "input": "[[524288]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 0.2652
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 0.00624,
+            "input": "[[262144]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 0.4923
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.004096,
+            "input": "[[131072]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 0.75
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.003552,
+            "input": "[[65536]]",
+            "reference_ms": 0.003072,
+            "speedup_vs_pytorch": 0.8649
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.004336,
+            "input": "[[4096]]",
+            "reference_ms": 0.004096,
+            "speedup_vs_pytorch": 0.9446
+          }
+        ]
+      },
+      "pixel_shuffle_conv2d.py": {
+        "alignment": "same_length",
+        "file": "pixel_shuffle_conv2d.py",
+        "generated_ms_sum": 30.845456,
+        "golden_json": "pixel_shuffle_conv2d.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 7,
+        "reference_ms_sum": 7.406592,
+        "result_json": "pixel_shuffle_conv2d.json",
+        "speedup_vs_pytorch": 0.2401,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 5,
+            "generated_ms": 5.632032,
+            "input": "[[16, 3, 512, 512], [12, 3, 3, 3], [12]]",
+            "reference_ms": 1.160192,
+            "speedup_vs_pytorch": 0.206
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 1.363936,
+            "input": "[[16, 3, 256, 256], [12, 3, 3, 3], [12]]",
+            "reference_ms": 0.311296,
+            "speedup_vs_pytorch": 0.2282
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 23.406496,
+            "input": "[[16, 3, 1024, 1024], [12, 3, 3, 3], [12]]",
+            "reference_ms": 5.758976,
+            "speedup_vs_pytorch": 0.246
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.330144,
+            "input": "[[16, 3, 128, 128], [12, 3, 3, 3], [12]]",
+            "reference_ms": 0.095232,
+            "speedup_vs_pytorch": 0.2885
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.064416,
+            "input": "[[16, 3, 64, 64], [12, 3, 3, 3], [12]]",
+            "reference_ms": 0.036864,
+            "speedup_vs_pytorch": 0.5723
+          }
+        ]
+      },
+      "pseudoinverse_svd.py": {
+        "alignment": "same_length",
+        "file": "pseudoinverse_svd.py",
+        "generated_ms_sum": 82.495344,
+        "golden_json": "pseudoinverse_svd.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 8,
+        "reference_ms_sum": 43.647489,
+        "result_json": "pseudoinverse_svd.json",
+        "speedup_vs_pytorch": 0.5291,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 7,
+            "generated_ms": 63.619072,
+            "input": "[[512, 512]]",
+            "reference_ms": 26.881536,
+            "speedup_vs_pytorch": 0.4225
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.524096,
+            "input": "[[8, 8]]",
+            "reference_ms": 0.329728,
+            "speedup_vs_pytorch": 0.6291
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.467904,
+            "input": "[[4, 4]]",
+            "reference_ms": 0.31232,
+            "speedup_vs_pytorch": 0.6675
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.601568,
+            "input": "[[16, 16]]",
+            "reference_ms": 0.4096,
+            "speedup_vs_pytorch": 0.6809
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.697264,
+            "input": "[[32, 32]]",
+            "reference_ms": 0.504832,
+            "speedup_vs_pytorch": 0.724
+          }
+        ]
+      },
+      "qr.py": {
+        "alignment": "same_length",
+        "file": "qr.py",
+        "generated_ms_sum": 0.014864,
+        "golden_json": "qr.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 9,
+        "reference_ms_sum": 80.457215,
+        "result_json": "qr.json",
+        "speedup_vs_pytorch": 5412.8914,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.001984,
+            "input": "[[16, 16]]",
+            "reference_ms": 0.09216,
+            "speedup_vs_pytorch": 46.4516
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.001696,
+            "input": "[[32, 32]]",
+            "reference_ms": 0.140288,
+            "speedup_vs_pytorch": 82.717
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.0016,
+            "input": "[[64, 64]]",
+            "reference_ms": 0.294912,
+            "speedup_vs_pytorch": 184.32
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.001664,
+            "input": "[[128, 128]]",
+            "reference_ms": 0.746496,
+            "speedup_vs_pytorch": 448.6154
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.001632,
+            "input": "[[256, 256]]",
+            "reference_ms": 1.092608,
+            "speedup_vs_pytorch": 669.4902
+          }
+        ]
+      },
+      "rad2deg_sqrt.py": {
+        "alignment": "same_length",
+        "file": "rad2deg_sqrt.py",
+        "generated_ms_sum": 14.937281,
+        "golden_json": "rad2deg_sqrt.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 2.609152,
+        "result_json": "rad2deg_sqrt.json",
+        "speedup_vs_pytorch": 0.1747,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 7.465056,
+            "input": "[[134217728]]",
+            "reference_ms": 1.229824,
+            "speedup_vs_pytorch": 0.1647
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 3.715536,
+            "input": "[[67108864]]",
+            "reference_ms": 0.622592,
+            "speedup_vs_pytorch": 0.1676
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.864576,
+            "input": "[[33554432]]",
+            "reference_ms": 0.318464,
+            "speedup_vs_pytorch": 0.1708
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.933888,
+            "input": "[[16777216]]",
+            "reference_ms": 0.166912,
+            "speedup_vs_pytorch": 0.1787
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.46656,
+            "input": "[[8388608]]",
+            "reference_ms": 0.091136,
+            "speedup_vs_pytorch": 0.1953
+          }
+        ]
+      },
+      "rand.py": {
+        "file": "rand.py",
+        "generated_ms_sum": null,
+        "golden_json": "rand.json",
+        "message": "Generated perf JSON is empty. The perf script completed but did not record timings.",
+        "num_cases": 0,
+        "reference_ms_sum": null,
+        "result_json": "rand.json",
+        "speedup_vs_pytorch": null,
+        "status": "empty_result"
+      },
+      "reciprocal.py": {
+        "alignment": "same_length",
+        "file": "reciprocal.py",
+        "generated_ms_sum": 9.190384,
+        "golden_json": "reciprocal.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.34656,
+        "result_json": "reciprocal.json",
+        "speedup_vs_pytorch": 0.1465,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.567568,
+            "input": "[[134217728]]",
+            "reference_ms": 0.615424,
+            "speedup_vs_pytorch": 0.1347
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.287712,
+            "input": "[[67108864]]",
+            "reference_ms": 0.313344,
+            "speedup_vs_pytorch": 0.137
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.146784,
+            "input": "[[33554432]]",
+            "reference_ms": 0.161792,
+            "speedup_vs_pytorch": 0.1411
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.57488,
+            "input": "[[16777216]]",
+            "reference_ms": 0.08704,
+            "speedup_vs_pytorch": 0.1514
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.288896,
+            "input": "[[8388608]]",
+            "reference_ms": 0.048128,
+            "speedup_vs_pytorch": 0.1666
+          }
+        ]
+      },
+      "relu.py": {
+        "alignment": "same_length",
+        "file": "relu.py",
+        "generated_ms_sum": 9.361344,
+        "golden_json": "relu.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.347584,
+        "result_json": "relu.json",
+        "speedup_vs_pytorch": 0.144,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.661248,
+            "input": "[[134217728]]",
+            "reference_ms": 0.616448,
+            "speedup_vs_pytorch": 0.1322
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.332544,
+            "input": "[[67108864]]",
+            "reference_ms": 0.313344,
+            "speedup_vs_pytorch": 0.1343
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.167488,
+            "input": "[[33554432]]",
+            "reference_ms": 0.161792,
+            "speedup_vs_pytorch": 0.1386
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.584992,
+            "input": "[[16777216]]",
+            "reference_ms": 0.086016,
+            "speedup_vs_pytorch": 0.147
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.293856,
+            "input": "[[8388608]]",
+            "reference_ms": 0.048128,
+            "speedup_vs_pytorch": 0.1638
+          }
+        ]
+      },
+      "relu_sqrt.py": {
+        "alignment": "same_length",
+        "file": "relu_sqrt.py",
+        "generated_ms_sum": 9.36288,
+        "golden_json": "relu_sqrt.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 2.599936,
+        "result_json": "relu_sqrt.json",
+        "speedup_vs_pytorch": 0.2777,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.660928,
+            "input": "[[134217728]]",
+            "reference_ms": 1.229824,
+            "speedup_vs_pytorch": 0.2639
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.331168,
+            "input": "[[67108864]]",
+            "reference_ms": 0.622592,
+            "speedup_vs_pytorch": 0.2671
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.167584,
+            "input": "[[33554432]]",
+            "reference_ms": 0.318464,
+            "speedup_vs_pytorch": 0.2728
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.147968,
+            "input": "[[4194304]]",
+            "reference_ms": 0.041984,
+            "speedup_vs_pytorch": 0.2837
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.585056,
+            "input": "[[16777216]]",
+            "reference_ms": 0.166912,
+            "speedup_vs_pytorch": 0.2853
+          }
+        ]
+      },
+      "rsqrt.py": {
+        "alignment": "same_length",
+        "file": "rsqrt.py",
+        "generated_ms_sum": 67.239105,
+        "golden_json": "rsqrt.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 16,
+        "reference_ms_sum": 5.57568,
+        "result_json": "rsqrt.json",
+        "speedup_vs_pytorch": 0.0829,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 4.049152,
+            "input": "[[4096]]",
+            "reference_ms": 0.058368,
+            "speedup_vs_pytorch": 0.0144
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 3.987744,
+            "input": "[[16384]]",
+            "reference_ms": 0.058368,
+            "speedup_vs_pytorch": 0.0146
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 3.942176,
+            "input": "[[8192]]",
+            "reference_ms": 0.058368,
+            "speedup_vs_pytorch": 0.0148
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 4.260096,
+            "input": "[[131072]]",
+            "reference_ms": 0.064512,
+            "speedup_vs_pytorch": 0.0151
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 3.963456,
+            "input": "[[32768]]",
+            "reference_ms": 0.06144,
+            "speedup_vs_pytorch": 0.0155
+          }
+        ]
+      },
+      "scaled_add_dot.py": {
+        "alignment": "same_length",
+        "file": "scaled_add_dot.py",
+        "generated_ms_sum": 17.251968,
+        "golden_json": "scaled_add_dot.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 4.219904,
+        "result_json": "scaled_add_dot.json",
+        "speedup_vs_pytorch": 0.2446,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 8.54048,
+            "input": "[[134217728], [134217728]]",
+            "reference_ms": 1.975296,
+            "speedup_vs_pytorch": 0.2313
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 4.28448,
+            "input": "[[67108864], [67108864]]",
+            "reference_ms": 1.00352,
+            "speedup_vs_pytorch": 0.2342
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 2.156064,
+            "input": "[[33554432], [33554432]]",
+            "reference_ms": 0.518144,
+            "speedup_vs_pytorch": 0.2403
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.28672,
+            "input": "[[4194304], [4194304]]",
+            "reference_ms": 0.07168,
+            "speedup_vs_pytorch": 0.25
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 1.089952,
+            "input": "[[16777216], [16777216]]",
+            "reference_ms": 0.275456,
+            "speedup_vs_pytorch": 0.2527
+          }
+        ]
+      },
+      "sigmoid.py": {
+        "alignment": "same_length",
+        "file": "sigmoid.py",
+        "generated_ms_sum": 9.347616,
+        "golden_json": "sigmoid.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 1.344512,
+        "result_json": "sigmoid.json",
+        "speedup_vs_pytorch": 0.1438,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 4.651552,
+            "input": "[[134217728]]",
+            "reference_ms": 0.612352,
+            "speedup_vs_pytorch": 0.1316
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 2.330624,
+            "input": "[[67108864]]",
+            "reference_ms": 0.31232,
+            "speedup_vs_pytorch": 0.134
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.167328,
+            "input": "[[33554432]]",
+            "reference_ms": 0.161792,
+            "speedup_vs_pytorch": 0.1386
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.584448,
+            "input": "[[16777216]]",
+            "reference_ms": 0.08704,
+            "speedup_vs_pytorch": 0.1489
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.292864,
+            "input": "[[8388608]]",
+            "reference_ms": 0.048128,
+            "speedup_vs_pytorch": 0.1643
+          }
+        ]
+      },
+      "sigmoid_argmax.py": {
+        "alignment": "same_length",
+        "file": "sigmoid_argmax.py",
+        "generated_ms_sum": 26.239473,
+        "golden_json": "sigmoid_argmax.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 17,
+        "reference_ms_sum": 4.064256,
+        "result_json": "sigmoid_argmax.json",
+        "speedup_vs_pytorch": 0.1549,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 16,
+            "generated_ms": 12.999744,
+            "input": "[[16384, 16384]]",
+            "reference_ms": 1.85344,
+            "speedup_vs_pytorch": 0.1426
+          },
+          {
+            "case_index": 15,
+            "generated_ms": 6.520864,
+            "input": "[[8192, 16384]]",
+            "reference_ms": 0.945152,
+            "speedup_vs_pytorch": 0.1449
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 3.268608,
+            "input": "[[8192, 8192]]",
+            "reference_ms": 0.521216,
+            "speedup_vs_pytorch": 0.1595
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 1.650496,
+            "input": "[[4096, 8192]]",
+            "reference_ms": 0.27648,
+            "speedup_vs_pytorch": 0.1675
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.845888,
+            "input": "[[4096, 4096]]",
+            "reference_ms": 0.151552,
+            "speedup_vs_pytorch": 0.1792
+          }
+        ]
+      },
+      "sigmoid_conv2d.py": {
+        "alignment": "same_length",
+        "file": "sigmoid_conv2d.py",
+        "generated_ms_sum": 48.749011,
+        "golden_json": "sigmoid_conv2d.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 7,
+        "reference_ms_sum": 4.158976,
+        "result_json": "sigmoid_conv2d.json",
+        "speedup_vs_pytorch": 0.0853,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 6,
+            "generated_ms": 36.781235,
+            "input": "[[1, 64, 1024, 1024], [128, 64, 3, 3], [128]]",
+            "reference_ms": 2.991616,
+            "speedup_vs_pytorch": 0.0813
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 8.976864,
+            "input": "[[1, 64, 512, 512], [128, 64, 3, 3], [128]]",
+            "reference_ms": 0.765952,
+            "speedup_vs_pytorch": 0.0853
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 2.220864,
+            "input": "[[1, 64, 256, 256], [128, 64, 3, 3], [128]]",
+            "reference_ms": 0.211968,
+            "speedup_vs_pytorch": 0.0954
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.542816,
+            "input": "[[1, 64, 128, 128], [128, 64, 3, 3], [128]]",
+            "reference_ms": 0.0768,
+            "speedup_vs_pytorch": 0.1415
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.110944,
+            "input": "[[1, 64, 64, 64], [128, 64, 3, 3], [128]]",
+            "reference_ms": 0.043008,
+            "speedup_vs_pytorch": 0.3877
+          }
+        ]
+      },
+      "softmax.py": {
+        "alignment": "same_length",
+        "file": "softmax.py",
+        "generated_ms_sum": 0.026944,
+        "golden_json": "softmax.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 16,
+        "reference_ms_sum": 10.145792,
+        "result_json": "softmax.json",
+        "speedup_vs_pytorch": 376.5511,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 1,
+            "generated_ms": 0.001792,
+            "input": "[[1024, 32]]",
+            "reference_ms": 0.007168,
+            "speedup_vs_pytorch": 4.0
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.001792,
+            "input": "[[1024, 64]]",
+            "reference_ms": 0.008192,
+            "speedup_vs_pytorch": 4.5714
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.001984,
+            "input": "[[1024, 16]]",
+            "reference_ms": 0.009216,
+            "speedup_vs_pytorch": 4.6452
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.00176,
+            "input": "[[1024, 256]]",
+            "reference_ms": 0.009216,
+            "speedup_vs_pytorch": 5.2364
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.001728,
+            "input": "[[1024, 128]]",
+            "reference_ms": 0.009216,
+            "speedup_vs_pytorch": 5.3333
+          }
+        ]
+      },
+      "softmax_mul.py": {
+        "alignment": "same_length",
+        "file": "softmax_mul.py",
+        "generated_ms_sum": 120.808625,
+        "golden_json": "softmax_mul.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 17.384448,
+        "result_json": "softmax_mul.json",
+        "speedup_vs_pytorch": 0.1439,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 10,
+            "generated_ms": 1.629248,
+            "input": "[[1024, 16384], [1024, 16384]]",
+            "reference_ms": 0.223232,
+            "speedup_vs_pytorch": 0.137
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 3.76912,
+            "input": "[[1024, 32768], [1024, 32768]]",
+            "reference_ms": 0.52736,
+            "speedup_vs_pytorch": 0.1399
+          },
+          {
+            "case_index": 15,
+            "generated_ms": 60.864864,
+            "input": "[[1024, 524288], [1024, 524288]]",
+            "reference_ms": 8.660992,
+            "speedup_vs_pytorch": 0.1423
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 30.3104,
+            "input": "[[1024, 262144], [1024, 262144]]",
+            "reference_ms": 4.352,
+            "speedup_vs_pytorch": 0.1436
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 15.21024,
+            "input": "[[1024, 131072], [1024, 131072]]",
+            "reference_ms": 2.193408,
+            "speedup_vs_pytorch": 0.1442
+          }
+        ]
+      },
+      "solve_and_add_scaled_vector..py": {
+        "alignment": "same_length",
+        "file": "solve_and_add_scaled_vector..py",
+        "generated_ms_sum": 15.538719,
+        "golden_json": "solve_and_add_scaled_vector..json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 11,
+        "reference_ms_sum": 9.422848,
+        "result_json": "solve_and_add_scaled_vector..json",
+        "speedup_vs_pytorch": 0.6064,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 10,
+            "generated_ms": 10.756351,
+            "input": "[[32768, 32768], [32768, 1], [32768, 1], 1.0]",
+            "reference_ms": 5.569536,
+            "speedup_vs_pytorch": 0.5178
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 2.924288,
+            "input": "[[16384, 16384], [16384, 1], [16384, 1], 1.0]",
+            "reference_ms": 2.008064,
+            "speedup_vs_pytorch": 0.6867
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 1.004864,
+            "input": "[[8192, 8192], [8192, 1], [8192, 1], 1.0]",
+            "reference_ms": 0.881664,
+            "speedup_vs_pytorch": 0.8774
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.04096,
+            "input": "[[32, 32], [32, 1], [32, 1], 1.0]",
+            "reference_ms": 0.041984,
+            "speedup_vs_pytorch": 1.025
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 0.397152,
+            "input": "[[4096, 4096], [4096, 1], [4096, 1], 1.0]",
+            "reference_ms": 0.41472,
+            "speedup_vs_pytorch": 1.0442
+          }
+        ]
+      },
+      "solve_multiple_lu.py": {
+        "alignment": "same_length",
+        "file": "solve_multiple_lu.py",
+        "generated_ms_sum": 7.703056,
+        "golden_json": "solve_multiple_lu.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 6,
+        "reference_ms_sum": 6.18496,
+        "result_json": "solve_multiple_lu.json",
+        "speedup_vs_pytorch": 0.8029,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 5,
+            "generated_ms": 4.624928,
+            "input": "[[1024, 1024], [1024, 1024]]",
+            "reference_ms": 3.487744,
+            "speedup_vs_pytorch": 0.7541
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 1.849392,
+            "input": "[[512, 512], [512, 512]]",
+            "reference_ms": 1.417216,
+            "speedup_vs_pytorch": 0.7663
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.186368,
+            "input": "[[32, 32], [32, 32]]",
+            "reference_ms": 0.14848,
+            "speedup_vs_pytorch": 0.7967
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.175456,
+            "input": "[[64, 64], [64, 64]]",
+            "reference_ms": 0.185344,
+            "speedup_vs_pytorch": 1.0564
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.58224,
+            "input": "[[256, 256], [256, 256]]",
+            "reference_ms": 0.625664,
+            "speedup_vs_pytorch": 1.0746
+          }
+        ]
+      },
+      "spectral_norm_eig.py": {
+        "alignment": "same_length",
+        "file": "spectral_norm_eig.py",
+        "generated_ms_sum": 0.020352,
+        "golden_json": "spectral_norm_eig.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 6,
+        "reference_ms_sum": 9.777152,
+        "result_json": "spectral_norm_eig.json",
+        "speedup_vs_pytorch": 480.4025,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 0,
+            "generated_ms": 0.003744,
+            "input": "[[4, 4]]",
+            "reference_ms": 0.193536,
+            "speedup_vs_pytorch": 51.6923
+          },
+          {
+            "case_index": 1,
+            "generated_ms": 0.003232,
+            "input": "[[8, 8]]",
+            "reference_ms": 0.195584,
+            "speedup_vs_pytorch": 60.5149
+          },
+          {
+            "case_index": 2,
+            "generated_ms": 0.00336,
+            "input": "[[16, 16]]",
+            "reference_ms": 0.228352,
+            "speedup_vs_pytorch": 67.9619
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.00336,
+            "input": "[[32, 32]]",
+            "reference_ms": 0.401408,
+            "speedup_vs_pytorch": 119.4667
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.00336,
+            "input": "[[64, 64]]",
+            "reference_ms": 1.517568,
+            "speedup_vs_pytorch": 451.6571
+          }
+        ]
+      },
+      "sub.py": {
+        "alignment": "same_length",
+        "file": "sub.py",
+        "generated_ms_sum": 481.67098,
+        "golden_json": "sub.json",
+        "message": "Speedup was computed, but TritonBench excludes values outside 0.1 < speedup < 10 from its aggregate.",
+        "num_cases": 16,
+        "reference_ms_sum": 3.204096,
+        "result_json": "sub.json",
+        "speedup_vs_pytorch": 0.0067,
+        "status": "out_of_range",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 244.25293,
+            "input": "[[134217728], [134217728]]",
+            "reference_ms": 1.521664,
+            "speedup_vs_pytorch": 0.0062
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 122.001442,
+            "input": "[[67108864], [67108864]]",
+            "reference_ms": 0.768,
+            "speedup_vs_pytorch": 0.0063
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 60.945122,
+            "input": "[[33554432], [33554432]]",
+            "reference_ms": 0.393216,
+            "speedup_vs_pytorch": 0.0065
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 30.553215,
+            "input": "[[16777216], [16777216]]",
+            "reference_ms": 0.205824,
+            "speedup_vs_pytorch": 0.0067
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 16.12352,
+            "input": "[[8388608], [8388608]]",
+            "reference_ms": 0.11264,
+            "speedup_vs_pytorch": 0.007
+          }
+        ]
+      },
+      "sum.py": {
+        "alignment": "same_length",
+        "file": "sum.py",
+        "generated_ms_sum": 4.08392,
+        "golden_json": "sum.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 16,
+        "reference_ms_sum": 0.927744,
+        "result_json": "sum.json",
+        "speedup_vs_pytorch": 0.2272,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 15,
+            "generated_ms": 1.947872,
+            "input": "[[134217728]]",
+            "reference_ms": 0.335872,
+            "speedup_vs_pytorch": 0.1724
+          },
+          {
+            "case_index": 14,
+            "generated_ms": 0.983264,
+            "input": "[[67108864]]",
+            "reference_ms": 0.196608,
+            "speedup_vs_pytorch": 0.2
+          },
+          {
+            "case_index": 13,
+            "generated_ms": 0.503008,
+            "input": "[[33554432]]",
+            "reference_ms": 0.103424,
+            "speedup_vs_pytorch": 0.2056
+          },
+          {
+            "case_index": 12,
+            "generated_ms": 0.259936,
+            "input": "[[16777216]]",
+            "reference_ms": 0.065536,
+            "speedup_vs_pytorch": 0.2521
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.138608,
+            "input": "[[8388608]]",
+            "reference_ms": 0.043008,
+            "speedup_vs_pytorch": 0.3103
+          }
+        ]
+      },
+      "sum_std.py": {
+        "alignment": "same_length",
+        "file": "sum_std.py",
+        "generated_ms_sum": 0.980864,
+        "golden_json": "sum_std.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 13,
+        "reference_ms_sum": 0.48128,
+        "result_json": "sum_std.json",
+        "speedup_vs_pytorch": 0.4907,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 12,
+            "generated_ms": 0.28576,
+            "input": "[[16777216]]",
+            "reference_ms": 0.080896,
+            "speedup_vs_pytorch": 0.2831
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 0.163904,
+            "input": "[[8388608]]",
+            "reference_ms": 0.057344,
+            "speedup_vs_pytorch": 0.3499
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.104192,
+            "input": "[[4194304]]",
+            "reference_ms": 0.041984,
+            "speedup_vs_pytorch": 0.4029
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 0.073856,
+            "input": "[[2097152]]",
+            "reference_ms": 0.032768,
+            "speedup_vs_pytorch": 0.4437
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 0.053984,
+            "input": "[[1048576]]",
+            "reference_ms": 0.029696,
+            "speedup_vs_pytorch": 0.5501
+          }
+        ]
+      },
+      "symmetric_matrix_vector_norm.py": {
+        "alignment": "same_length",
+        "file": "symmetric_matrix_vector_norm.py",
+        "generated_ms_sum": 5.718032,
+        "golden_json": "symmetric_matrix_vector_norm.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 13,
+        "reference_ms_sum": 1.158144,
+        "result_json": "symmetric_matrix_vector_norm.json",
+        "speedup_vs_pytorch": 0.2025,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 12,
+            "generated_ms": 4.065632,
+            "input": "[[16384, 16384], [16384]]",
+            "reference_ms": 0.669696,
+            "speedup_vs_pytorch": 0.1647
+          },
+          {
+            "case_index": 11,
+            "generated_ms": 1.104832,
+            "input": "[[8192, 8192], [8192]]",
+            "reference_ms": 0.185344,
+            "speedup_vs_pytorch": 0.1678
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 0.297168,
+            "input": "[[4096, 4096], [4096]]",
+            "reference_ms": 0.0768,
+            "speedup_vs_pytorch": 0.2584
+          },
+          {
+            "case_index": 9,
+            "generated_ms": 0.093312,
+            "input": "[[2048, 2048], [2048]]",
+            "reference_ms": 0.036864,
+            "speedup_vs_pytorch": 0.3951
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 0.034816,
+            "input": "[[1024, 1024], [1024]]",
+            "reference_ms": 0.023552,
+            "speedup_vs_pytorch": 0.6765
+          }
+        ]
+      },
+      "symmetric_mm_and_abs_sum.py": {
+        "alignment": "same_length",
+        "file": "symmetric_mm_and_abs_sum.py",
+        "generated_ms_sum": 5.037568,
+        "golden_json": "symmetric_mm_and_abs_sum.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 8,
+        "reference_ms_sum": 1.452032,
+        "result_json": "symmetric_mm_and_abs_sum.json",
+        "speedup_vs_pytorch": 0.2882,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 7,
+            "generated_ms": 4.257792,
+            "input": "[[2048, 2048], [2048, 2048], 1.0, 0.5]",
+            "reference_ms": 1.062912,
+            "speedup_vs_pytorch": 0.2496
+          },
+          {
+            "case_index": 6,
+            "generated_ms": 0.575488,
+            "input": "[[1024, 1024], [1024, 1024], 1.0, 0.5]",
+            "reference_ms": 0.17408,
+            "speedup_vs_pytorch": 0.3025
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.090208,
+            "input": "[[512, 512], [512, 512], 1.0, 0.5]",
+            "reference_ms": 0.06144,
+            "speedup_vs_pytorch": 0.6811
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.0384,
+            "input": "[[256, 256], [256, 256], 1.0, 0.5]",
+            "reference_ms": 0.041984,
+            "speedup_vs_pytorch": 1.0933
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.022752,
+            "input": "[[128, 128], [128, 128], 1.0, 0.5]",
+            "reference_ms": 0.03072,
+            "speedup_vs_pytorch": 1.3502
+          }
+        ]
+      },
+      "tanh_linear.py": {
+        "alignment": "same_length",
+        "file": "tanh_linear.py",
+        "generated_ms_sum": 593.925056,
+        "golden_json": "tanh_linear.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 11,
+        "reference_ms_sum": 142.792705,
+        "result_json": "tanh_linear.json",
+        "speedup_vs_pytorch": 0.2404,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 9,
+            "generated_ms": 70.516029,
+            "input": "[[2048, 16384], [4096, 16384], [4096]]",
+            "reference_ms": 15.410688,
+            "speedup_vs_pytorch": 0.2185
+          },
+          {
+            "case_index": 10,
+            "generated_ms": 514.771362,
+            "input": "[[4096, 32768], [8192, 32768], [8192]]",
+            "reference_ms": 124.740097,
+            "speedup_vs_pytorch": 0.2423
+          },
+          {
+            "case_index": 8,
+            "generated_ms": 7.585984,
+            "input": "[[1024, 8192], [2048, 8192], [2048]]",
+            "reference_ms": 2.178048,
+            "speedup_vs_pytorch": 0.2871
+          },
+          {
+            "case_index": 7,
+            "generated_ms": 0.826928,
+            "input": "[[512, 4096], [1024, 4096], [1024]]",
+            "reference_ms": 0.268288,
+            "speedup_vs_pytorch": 0.3244
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.05312,
+            "input": "[[128, 1024], [256, 1024], [256]]",
+            "reference_ms": 0.027648,
+            "speedup_vs_pytorch": 0.5205
+          }
+        ]
+      },
+      "tensordot_rsqrt.py": {
+        "alignment": "same_length",
+        "file": "tensordot_rsqrt.py",
+        "generated_ms_sum": 4.05712,
+        "golden_json": "tensordot_rsqrt.json",
+        "message": "Speedup accepted by TritonBench range filter.",
+        "num_cases": 7,
+        "reference_ms_sum": 1.231872,
+        "result_json": "tensordot_rsqrt.json",
+        "speedup_vs_pytorch": 0.3036,
+        "status": "accepted",
+        "worst_cases": [
+          {
+            "case_index": 6,
+            "generated_ms": 3.531328,
+            "input": "[[2048, 2048], [2048, 2048], 1]",
+            "reference_ms": 0.991232,
+            "speedup_vs_pytorch": 0.2807
+          },
+          {
+            "case_index": 5,
+            "generated_ms": 0.402016,
+            "input": "[[1024, 1024], [1024, 1024], 1]",
+            "reference_ms": 0.140288,
+            "speedup_vs_pytorch": 0.349
+          },
+          {
+            "case_index": 4,
+            "generated_ms": 0.059392,
+            "input": "[[512, 512], [512, 512], 1]",
+            "reference_ms": 0.036864,
+            "speedup_vs_pytorch": 0.6207
+          },
+          {
+            "case_index": 3,
+            "generated_ms": 0.026368,
+            "input": "[[256, 256], [256, 256], 1]",
+            "reference_ms": 0.02048,
+            "speedup_vs_pytorch": 0.7767
+          },
+          {
+            "case_index": 0,
+            "generated_ms": 0.018112,
+            "input": "[[32, 32], [32, 32], 1]",
+            "reference_ms": 0.014336,
+            "speedup_vs_pytorch": 0.7915
+          }
+        ]
+      }
+    },
+    "perf_batch_size": 1,
+    "raw_output_tail": "================================================================================================================================================================\nabs.json: 0.1442\nadd.json failed\nadd_mean.json: 0.1522\naddmm.json failed\nargmax.json: 0.2485\nautocast.json: 0.1403\nbitwise_and_binomial.json: 9.1319\nbroadcast_tensors.json: 1.9913\nconv2d.json: 2.7103\ncos_signbit.json failed\ndeterminant_via_qr.json failed\ndiv.json failed\neig.json: 0.8915\nerfc_sqrt.json: 0.3339\nexp_sqrt.json: 0.2779\nfused_cholesky_solve.json: 2.7315\nfused_cosine_embedding_loss_with_normalization.json: 0.3781\nfused_cross_entropy_log_softmax.json: 5.1708\nfused_fractional_max_pool2d_with_relu.json: 0.325\nfused_hardshrink_dropout.json: 0.3204\nfused_hardsigmoid_batch_norm.json: 0.7141\nfused_index_select_eq.json: 4.5839\nfused_lu_solve.json: 1.5243\nfused_mul_add_logsoftmax_dropout_bmm.json: 0.2021\nfused_mv_logsoftmax_dropout.json: 0.5033\nfused_mv_sigmoid_sub.json: 0.1574\nfused_qr_solve.json: 0.5528\nfused_transformer_block.json: 0.2454\ngelu.json: 0.1454\ni0.json: 0.232\nlog.json: 0.1553\nlogit.json: 0.4767\nlogspace.json: 0.6964\nlogsumexp.json: 0.1751\nlow_rank_svd_approximation.json: 0.507\nlu.py.json failed\nmatrix_multiply_symmetric.json failed\nmatrix_power_eig.json failed\nmatrix_vector_dot.json: 0.9456\nmin_gelu.json: 0.4942\nmul.json: 0.1635\nones_like.json: 1.3679\npixel_shuffle_conv2d.json: 0.2401\npseudoinverse_svd.json: 0.5291\nqr.json failed\nrad2deg_sqrt.json: 0.1747\nreciprocal.json: 0.1465\nrelu.json: 0.144\nrelu_sqrt.json: 0.2777\nrsqrt.json failed\nscaled_add_dot.json: 0.2446\nsigmoid.json: 0.1438\nsigmoid_argmax.json: 0.1549\nsigmoid_conv2d.json failed\nsoftmax.json failed\nsoftmax_mul.json: 0.1439\nsolve_and_add_scaled_vector..json: 0.6064\nsolve_multiple_lu.json: 0.8029\nspectral_norm_eig.json failed\nsub.json failed\nsum.json: 0.2272\nsum_std.json: 0.4907\nsymmetric_matrix_vector_norm.json: 0.2025\nsymmetric_mm_and_abs_sum.json: 0.2882\ntanh_linear.json: 0.2404\ntensordot_rsqrt.json: 0.3036\n[0.1442, 0.1522, 0.2485, 0.1403, 9.1319, 1.9913, 2.7103, 0.8915, 0.3339, 0.2779, 2.7315, 0.3781, 5.1708, 0.325, 0.3204, 0.7141, 4.5839, 1.5243, 0.2021, 0.5033, 0.1574, 0.5528, 0.2454, 0.1454, 0.232, 0.1553, 0.4767, 0.6964, 0.1751, 0.507, 0.9456, 0.4942, 0.1635, 1.3679, 0.2401, 0.5291, 0.1747, 0.1465, 0.144, 0.2777, 0.2446, 0.1438, 0.1549, 0.1439, 0.6064, 0.8029, 0.2272, 0.4907, 0.2025, 0.2882, 0.2404, 0.3036]\n\nperf_results\nspeed up: 0.85\n================================================================================================================================================================",
+    "reused_results": 0,
+    "skip_efficiency": false,
+    "speedup_vs_pytorch": 0.85
+  },
+  "predictions_path": "nvidia_iterative_runs/20260521-201300/iter_02/predictions.jsonl",
+  "run_id": "20260521-201300",
+  "total_predictions": 166
+}
