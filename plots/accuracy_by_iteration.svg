@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="560" viewBox="0 0 980 560">
+<rect x="0.00" y="0.00" width="980.00" height="560.00" fill="#ffffff" stroke="none" stroke-width="1.00" opacity="1.000"/>
+<text x="490.00" y="36.00" font-size="24" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Execution Accuracy Across Iterations</text>
+<text x="490.00" y="60.00" font-size="14" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">Phase 2 execution accuracy from iteration JSON summaries</text>
+<line x1="86.00" y1="462.00" x2="944.00" y2="462.00" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="74.00" y="467.00" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">0%</text>
+<line x1="86.00" y1="384.40" x2="944.00" y2="384.40" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="74.00" y="389.40" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">20%</text>
+<line x1="86.00" y1="306.80" x2="944.00" y2="306.80" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="74.00" y="311.80" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">40%</text>
+<line x1="86.00" y1="229.20" x2="944.00" y2="229.20" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="74.00" y="234.20" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">60%</text>
+<line x1="86.00" y1="151.60" x2="944.00" y2="151.60" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="74.00" y="156.60" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">80%</text>
+<line x1="86.00" y1="74.00" x2="944.00" y2="74.00" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="74.00" y="79.00" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">100%</text>
+<line x1="86.00" y1="74.00" x2="86.00" y2="462.00" stroke="#243b53" stroke-width="1.20"/>
+<line x1="86.00" y1="462.00" x2="944.00" y2="462.00" stroke="#243b53" stroke-width="1.20"/>
+<text x="28.00" y="268.00" font-size="15" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif" transform="rotate(-90.00 28.00 268.00)">Accuracy</text>
+<rect x="127.18" y="352.16" width="89.23" height="109.84" fill="#3f8f8c" stroke="#1f2933" stroke-width="1.00" opacity="0.880"/>
+<text x="171.80" y="340.16" font-size="13" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">28.31%</text>
+<text x="171.80" y="372.16" font-size="12" text-anchor="middle" font-weight="700" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">47/166</text>
+<text x="171.80" y="492.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 1</text>
+<text x="171.80" y="513.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">computed 47</text>
+<text x="171.80" y="532.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">accepted 37</text>
+<rect x="298.78" y="300.71" width="89.23" height="161.29" fill="#4f9b72" stroke="#1f2933" stroke-width="1.00" opacity="0.880"/>
+<text x="343.40" y="288.71" font-size="13" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">41.57%</text>
+<text x="343.40" y="320.71" font-size="12" text-anchor="middle" font-weight="700" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">69/166</text>
+<text x="343.40" y="492.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 2</text>
+<text x="343.40" y="513.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">computed 66</text>
+<text x="343.40" y="532.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">accepted 52</text>
+<rect x="470.38" y="258.65" width="89.23" height="203.35" fill="#9b8b3f" stroke="#1f2933" stroke-width="1.00" opacity="0.880"/>
+<text x="515.00" y="246.65" font-size="13" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">52.41%</text>
+<text x="515.00" y="278.65" font-size="12" text-anchor="middle" font-weight="700" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">87/166</text>
+<text x="515.00" y="492.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 3</text>
+<text x="515.00" y="513.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">computed 85</text>
+<text x="515.00" y="532.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">accepted 65</text>
+<rect x="641.98" y="218.92" width="89.23" height="243.08" fill="#a35d4d" stroke="#1f2933" stroke-width="1.00" opacity="0.880"/>
+<text x="686.60" y="206.92" font-size="13" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">62.65%</text>
+<text x="686.60" y="238.92" font-size="12" text-anchor="middle" font-weight="700" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">104/166</text>
+<text x="686.60" y="492.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 4</text>
+<text x="686.60" y="513.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">computed 101</text>
+<text x="686.60" y="532.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">accepted 75</text>
+<rect x="813.58" y="207.24" width="89.23" height="254.76" fill="#6d77a8" stroke="#1f2933" stroke-width="1.00" opacity="0.880"/>
+<text x="858.20" y="195.24" font-size="13" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">65.66%</text>
+<text x="858.20" y="227.24" font-size="12" text-anchor="middle" font-weight="700" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">109/166</text>
+<text x="858.20" y="492.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 5</text>
+<text x="858.20" y="513.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">computed 106</text>
+<text x="858.20" y="532.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">accepted 78</text>
+</svg>

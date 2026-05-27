@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680">
+<rect x="0.00" y="0.00" width="1100.00" height="680.00" fill="#ffffff" stroke="none" stroke-width="1.00" opacity="1.000"/>
+<text x="550.00" y="36.00" font-size="24" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Speedup vs PyTorch Baseline by Iteration</text>
+<text x="550.00" y="62.00" font-size="14" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">Accepted range only</text>
+<line x1="96.00" y1="568.00" x2="1062.00" y2="568.00" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="84.00" y="573.00" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">0.100x</text>
+<line x1="96.00" y1="325.00" x2="1062.00" y2="325.00" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="84.00" y="330.00" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">1.00x</text>
+<line x1="96.00" y1="82.00" x2="1062.00" y2="82.00" stroke="#d9e2ec" stroke-width="1.00"/>
+<text x="84.00" y="87.00" font-size="12" text-anchor="end" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">10.0x</text>
+<line x1="96.00" y1="325.00" x2="1062.00" y2="325.00" stroke="#c2410c" stroke-width="1.50" stroke-dasharray="6 5"/>
+<text x="1058.00" y="317.00" font-size="12" text-anchor="end" font-weight="400" fill="#9a3412" font-family="Arial, Helvetica, sans-serif">PyTorch baseline (1x)</text>
+<line x1="96.00" y1="82.00" x2="96.00" y2="568.00" stroke="#243b53" stroke-width="1.20"/>
+<line x1="96.00" y1="568.00" x2="1062.00" y2="568.00" stroke="#243b53" stroke-width="1.20"/>
+<text x="28.00" y="325.00" font-size="15" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif" transform="rotate(-90.00 28.00 325.00)">Speedup</text>
+<line x1="192.60" y1="316.04" x2="192.60" y2="530.70" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="167.72" y1="316.04" x2="217.48" y2="316.04" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="167.72" y1="530.70" x2="217.48" y2="530.70" stroke="#1f5f6f" stroke-width="1.70"/>
+<rect x="148.16" y="385.97" width="88.87" height="122.85" fill="#6aa5b8" stroke="#1f5f6f" stroke-width="1.50" opacity="0.720"/>
+<line x1="148.16" y1="457.44" x2="237.04" y2="457.44" stroke="#111827" stroke-width="2.20"/>
+<circle cx="186.60" cy="291.80" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="188.60" cy="256.50" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="190.60" cy="218.27" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="192.60" cy="151.76" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="194.60" cy="89.10" r="2.6" fill="#c2410c" opacity="0.45"/>
+<text x="192.60" y="598.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 1</text>
+<text x="192.60" y="618.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">n=37</text>
+<text x="192.60" y="636.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">med 0.285x</text>
+<text x="192.60" y="654.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">acc 28.31%</text>
+<line x1="385.80" y1="330.90" x2="385.80" y2="532.26" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="360.92" y1="330.90" x2="410.68" y2="330.90" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="360.92" y1="532.26" x2="410.68" y2="532.26" stroke="#1f5f6f" stroke-width="1.70"/>
+<rect x="341.36" y="370.23" width="88.87" height="138.77" fill="#6aa5b8" stroke="#1f5f6f" stroke-width="1.50" opacity="0.720"/>
+<line x1="341.36" y1="453.51" x2="430.24" y2="453.51" stroke="#111827" stroke-width="2.20"/>
+<circle cx="379.80" cy="291.94" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="381.80" cy="280.51" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="383.80" cy="252.31" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="385.80" cy="219.78" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="387.80" cy="218.95" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="389.80" cy="164.32" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="391.80" cy="151.61" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="379.80" cy="91.58" r="2.6" fill="#c2410c" opacity="0.45"/>
+<text x="385.80" y="598.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 2</text>
+<text x="385.80" y="618.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">n=52</text>
+<text x="385.80" y="636.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">med 0.296x</text>
+<text x="385.80" y="654.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">acc 41.57%</text>
+<line x1="579.00" y1="320.75" x2="579.00" y2="529.81" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="554.12" y1="320.75" x2="603.88" y2="320.75" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="554.12" y1="529.81" x2="603.88" y2="529.81" stroke="#1f5f6f" stroke-width="1.70"/>
+<rect x="534.56" y="375.94" width="88.87" height="134.33" fill="#6aa5b8" stroke="#1f5f6f" stroke-width="1.50" opacity="0.720"/>
+<line x1="534.56" y1="460.25" x2="623.44" y2="460.25" stroke="#111827" stroke-width="2.20"/>
+<circle cx="573.00" cy="292.02" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="575.00" cy="280.18" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="577.00" cy="254.87" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="579.00" cy="226.44" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="581.00" cy="219.85" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="583.00" cy="218.68" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="585.00" cy="164.54" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="573.00" cy="147.67" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="575.00" cy="90.09" r="2.6" fill="#c2410c" opacity="0.45"/>
+<text x="579.00" y="598.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 3</text>
+<text x="579.00" y="618.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">n=65</text>
+<text x="579.00" y="636.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">med 0.278x</text>
+<text x="579.00" y="654.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">acc 52.41%</text>
+<line x1="772.20" y1="316.04" x2="772.20" y2="529.81" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="747.32" y1="316.04" x2="797.08" y2="316.04" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="747.32" y1="529.81" x2="797.08" y2="529.81" stroke="#1f5f6f" stroke-width="1.70"/>
+<rect x="727.76" y="378.02" width="88.87" height="131.83" fill="#6aa5b8" stroke="#1f5f6f" stroke-width="1.50" opacity="0.720"/>
+<line x1="727.76" y1="460.25" x2="816.64" y2="460.25" stroke="#111827" stroke-width="2.20"/>
+<circle cx="766.20" cy="291.80" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="768.20" cy="280.18" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="770.20" cy="252.31" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="772.20" cy="226.44" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="774.20" cy="219.78" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="776.20" cy="218.27" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="778.20" cy="164.32" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="766.20" cy="147.67" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="768.20" cy="89.10" r="2.6" fill="#c2410c" opacity="0.45"/>
+<text x="772.20" y="598.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 4</text>
+<text x="772.20" y="618.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">n=75</text>
+<text x="772.20" y="636.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">med 0.278x</text>
+<text x="772.20" y="654.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">acc 62.65%</text>
+<line x1="965.40" y1="309.52" x2="965.40" y2="529.81" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="940.52" y1="309.52" x2="990.28" y2="309.52" stroke="#1f5f6f" stroke-width="1.70"/>
+<line x1="940.52" y1="529.81" x2="990.28" y2="529.81" stroke="#1f5f6f" stroke-width="1.70"/>
+<rect x="920.96" y="374.11" width="88.87" height="135.68" fill="#6aa5b8" stroke="#1f5f6f" stroke-width="1.50" opacity="0.720"/>
+<line x1="920.96" y1="460.04" x2="1009.84" y2="460.04" stroke="#111827" stroke-width="2.20"/>
+<circle cx="959.40" cy="291.80" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="961.40" cy="280.18" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="963.40" cy="252.31" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="965.40" cy="226.44" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="967.40" cy="219.78" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="969.40" cy="218.27" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="971.40" cy="164.32" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="959.40" cy="147.67" r="2.6" fill="#c2410c" opacity="0.45"/>
+<circle cx="961.40" cy="89.10" r="2.6" fill="#c2410c" opacity="0.45"/>
+<text x="965.40" y="598.00" font-size="14" text-anchor="middle" font-weight="700" fill="#1f2933" font-family="Arial, Helvetica, sans-serif">Iter 5</text>
+<text x="965.40" y="618.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">n=78</text>
+<text x="965.40" y="636.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">med 0.278x</text>
+<text x="965.40" y="654.00" font-size="12" text-anchor="middle" font-weight="400" fill="#52606d" font-family="Arial, Helvetica, sans-serif">acc 65.66%</text>
+</svg>

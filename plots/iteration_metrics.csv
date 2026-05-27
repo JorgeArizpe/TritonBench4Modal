@@ -1,0 +1,6 @@
+iteration,call_passed,call_rate,exec_passed,exec_rate,attempted_results,computed_results,accepted_results,json_mean_speedup,speedup_count,speedup_median,speedup_q1,speedup_q3,accepted_speedup_count,accepted_speedup_median,accepted_speedup_q1,accepted_speedup_q3
+1,47,28.31,47,28.31,47,47,37,188.1600,47,0.3204,0.1638,1.0886,37,0.2851,0.1752,0.5612
+2,70,42.17,69,41.57,69,66,52,108.5482,66,0.3227,0.1635,1.3679,52,0.2959,0.1749,0.6514
+3,87,52.41,87,52.41,87,85,65,185.2313,85,0.3193,0.1601,1.4480,65,0.2776,0.1728,0.6171
+4,104,62.65,104,62.65,17,101,75,563.9076,101,0.3204,0.1638,1.7602,75,0.2776,0.1735,0.6051
+5,109,65.66,109,65.66,8,106,78,538.5636,106,0.3227,0.1638,1.5291,78,0.2782,0.1736,0.6279
