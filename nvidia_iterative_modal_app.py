@@ -35,7 +35,7 @@ from typing import Any
 # Importing the function modules registers their @app.function decorators with
 # the Modal app discovered via modal_app.app.
 from modal_app import app  # noqa: F401
-from generation import generate_iteration  # noqa: F401
+from generation import generate_iteration, DEFAULT_USE_GUIDED_JSON  # noqa: F401
 from evaluation import evaluate_iteration  # noqa: F401
 from best_versions import materialize_best_versions  # noqa: F401
 
@@ -95,6 +95,7 @@ def main(
     auto_optimize_min_exec_rate: float = DEFAULT_AUTO_OPTIMIZE_MIN_EXEC_RATE,
     perf_batch_size: int = DEFAULT_PERF_BATCH_SIZE,
     skip_efficiency: bool = DEFAULT_SKIP_EFFICIENCY,
+    use_guided_json: bool = DEFAULT_USE_GUIDED_JSON,
     run_id: str = "",
 ) -> None:
     """Run NVIDIA generation -> benchmark -> feedback refinement loop."""
@@ -162,6 +163,7 @@ def main(
             loop_mode=loop_mode,
             target_speedup=target_speedup,
             auto_optimize_min_exec_rate=auto_optimize_min_exec_rate,
+            use_guided_json=use_guided_json,
         )
         previous_predictions_path = generation["predictions_path"]
 

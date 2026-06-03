@@ -36,7 +36,7 @@ _LOCAL_MODULES = [
 cpu_image = (
     modal.Image.debian_slim(python_version="3.12")
     .apt_install("git")
-    .pip_install("requests>=2.32")
+    .pip_install("requests>=2.32", "xgrammar>=0.1.14")
     .run_commands(f"git clone --depth 1 {TRITONBENCH_REPO} {REPO_DIR}")
     .add_local_python_source(*_LOCAL_MODULES)
 )

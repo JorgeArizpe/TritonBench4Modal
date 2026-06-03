@@ -30,6 +30,8 @@ from config import (
     DEFAULT_TEMPERATURE,
     RUNS_DIR,
 )
+
+DEFAULT_USE_GUIDED_JSON = True
 from modal_app import app, cpu_image, data_volume
 from llm_secrets import NVIDIA_SECRET
 from code_utils import (
@@ -83,6 +85,7 @@ def generate_iteration(
     loop_mode: str = DEFAULT_LOOP_MODE,
     target_speedup: float = DEFAULT_TARGET_SPEEDUP,
     auto_optimize_min_exec_rate: float = DEFAULT_AUTO_OPTIMIZE_MIN_EXEC_RATE,
+    use_guided_json: bool = DEFAULT_USE_GUIDED_JSON,
 ) -> dict[str, Any]:
     """Generate one complete prediction set for an iteration."""
     _reload_volume()
@@ -168,6 +171,7 @@ def generate_iteration(
             reference_context=reference_context,
             task_mode=task_mode,
             target_speedup=target_speedup,
+            use_guided_json=use_guided_json,
         )
         (prompts_dir / f"{idx:04d}_{file_name}.json").write_text(
             json.dumps(messages, indent=2), encoding="utf-8"
@@ -180,6 +184,7 @@ def generate_iteration(
                 temperature=temperature,
                 request_timeout_seconds=request_timeout_seconds,
                 retries=retries,
+                use_guided_json=use_guided_json,
             )
             code = _extract_code(raw)
             error = ""
@@ -340,6 +345,7 @@ def generate_iteration(
         "loop_mode": loop_mode,
         "target_speedup": target_speedup,
         "auto_optimize_min_exec_rate": auto_optimize_min_exec_rate,
+        "use_guided_json": use_guided_json,
         "previous_exec_rate": previous_exec_rate,
         "predictions_path": volume_predictions_path,
         "generated_scripts_dir": str(generated_dir.relative_to(DATA_DIR)),

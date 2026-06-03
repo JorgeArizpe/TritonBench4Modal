@@ -22,6 +22,67 @@ from config import (
 )
 
 # --------------------------------------------------------------------------- #
+# XGrammar schema
+# --------------------------------------------------------------------------- #
+
+try:
+    import xgrammar as xgr
+    _XGRAMMAR_AVAILABLE = True
+except ImportError:
+    xgr = None  # type: ignore[assignment]
+    _XGRAMMAR_AVAILABLE = False
+
+# Models that returned 400 for guided_json during this run; skip the attempt on
+# subsequent calls so we don't burn a round-trip per item. Thread-safe under GIL
+# for simple add/in operations.
+_GUIDED_JSON_UNSUPPORTED: set[str] = set()
+
+# JSON schema sent to vLLM-backed NIM endpoints via extra_body.guided_json.
+# XGrammar on the server enforces this schema token-by-token during decoding,
+# so the model cannot produce unparseable JSON or omit the code field.
+_CODE_OUTPUT_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "python_code": {
+            "type": "string",
+            "description": (
+                "Complete self-contained Python module containing the Triton "
+                "kernel(s) and the exact wrapper function. No prose, no markdown "
+                "fences, no test code."
+            ),
+        }
+    },
+    "required": ["python_code"],
+    "additionalProperties": False,
+}
+
+# Compile the schema at module load time so a malformed schema fails fast
+# rather than during a live generation run.
+if _XGRAMMAR_AVAILABLE:
+    try:
+        _xgr_compiled_schema = xgr.Grammar.from_json_schema(
+            json.dumps(_CODE_OUTPUT_SCHEMA)
+        )
+    except Exception as _exc:
+        raise RuntimeError(
+            f"XGrammar could not compile the output schema: {_exc}"
+        ) from _exc
+else:
+    _xgr_compiled_schema = None
+
+
+def _xgrammar_validate(text: str) -> bool:
+    """Client-side XGrammar check: returns True if text matches _CODE_OUTPUT_SCHEMA."""
+    if not _XGRAMMAR_AVAILABLE or _xgr_compiled_schema is None:
+        return True
+    try:
+        matcher = xgr.GrammarMatcher(_xgr_compiled_schema)
+        return bool(matcher.accept_string(text)) and matcher.is_terminated()
+    except Exception:
+        return True  # if the matcher itself errors, don't block the response
+
+
+# --------------------------------------------------------------------------- #
 # System prompt
 # --------------------------------------------------------------------------- #
 
@@ -40,6 +101,23 @@ PROMPT_HEADER = (
     "inputs cannot read or write out of bounds."
 )
 
+# Variant used when the API enforces _CODE_OUTPUT_SCHEMA via guided_json:
+# asks the model to put raw code (no markdown fences) in the python_code field.
+PROMPT_HEADER_GUIDED = (
+    "You are an expert Triton programmer. Write fast and correct Triton kernels "
+    "and Python wrapper functions from functional descriptions and wrapper "
+    "signatures. The wrapper function must exactly match the requested "
+    "signature and behavior.\n\n"
+    "Respond with a JSON object whose single key is 'python_code' and whose "
+    "value is a complete, self-contained Python module as a plain string "
+    "(no markdown fences, no prose). Include imports for torch, triton, and "
+    "triton.language as tl. Do not include test code, file I/O, network calls, "
+    "or benchmark harness code. "
+    "Correctness is mandatory; optimize only after preserving behavior. Every "
+    "Triton load and store must be guarded with valid masks so larger benchmark "
+    "inputs cannot read or write out of bounds."
+)
+
 # --------------------------------------------------------------------------- #
 # Code extraction and sanitization
 # --------------------------------------------------------------------------- #
@@ -47,6 +125,18 @@ PROMPT_HEADER = (
 
 def _extract_code(text: str) -> str:
     s = (text or "").strip()
+    # Handle JSON-structured output produced when guided_json is active.
+    # The model may still wrap the code in markdown fences inside the JSON value,
+    # so we fall through to the fence-stripping logic after extracting the field.
+    try:
+        obj = json.loads(s)
+        if isinstance(obj, dict) and "python_code" in obj:
+            code = str(obj["python_code"])
+            inner = re.search(r"```(?:python|py)?\s*\n(.*?)\n```", code, re.DOTALL)
+            return _sanitize_generated_code(inner.group(1) if inner else code)
+    except (json.JSONDecodeError, ValueError):
+        pass
+    # Fall back to markdown code-block extraction for non-JSON responses.
     match = re.search(r"```(?:python|py)?\s*\n(.*?)\n```", s, re.DOTALL)
     if match:
         return _sanitize_generated_code(match.group(1))
@@ -347,6 +437,7 @@ def _nvidia_chat(
     temperature: float,
     request_timeout_seconds: int,
     retries: int,
+    use_guided_json: bool = True,
 ) -> str:
     import requests
 
@@ -354,7 +445,7 @@ def _nvidia_chat(
     if not api_key:
         raise RuntimeError("NVIDIA_KEY or NVIDIA_API_KEY is not available in Modal")
 
-    payload = {
+    base_payload = {
         "model": model,
         "messages": messages,
         "max_tokens": max_tokens,
@@ -370,8 +461,19 @@ def _nvidia_chat(
         "Content-Type": "application/json",
     }
 
+    # guided_json is a vLLM-specific extension; not all NIM endpoints support it.
+    # On a 400 we record the model so future calls skip the attempt entirely, then
+    # retry without the server-side constraint and fall back to client-side XGrammar.
+    model_key = model.lower()
+    guided_json_active = use_guided_json and model_key not in _GUIDED_JSON_UNSUPPORTED
     last_error: Exception | None = None
     for attempt in range(retries):
+        payload = dict(base_payload)
+        if guided_json_active:
+            # Pass the compiled schema to the vLLM-backed NIM endpoint.
+            # XGrammar on the server enforces _CODE_OUTPUT_SCHEMA token-by-token,
+            # guaranteeing the response is valid JSON with a python_code field.
+            payload["extra_body"] = {"guided_json": _CODE_OUTPUT_SCHEMA}
         try:
             response = requests.post(
                 NVIDIA_INVOKE_URL,
@@ -380,6 +482,18 @@ def _nvidia_chat(
                 stream=True,
                 timeout=(30, request_timeout_seconds),
             )
+            # 400 with guided_json means the endpoint doesn't support it; cache the
+            # model so subsequent calls skip the attempt without burning a round-trip.
+            if response.status_code == 400 and guided_json_active:
+                _GUIDED_JSON_UNSUPPORTED.add(model_key)
+                guided_json_active = False
+                print(
+                    f"guided_json rejected by endpoint (400) for {model}; "
+                    "retrying without server-side constraint "
+                    "(will use client-side XGrammar validation instead)",
+                    flush=True,
+                )
+                continue
             # 408/409/429/5xx are transient; raising here lets the retry loop handle them.
             if response.status_code in {408, 409, 429, 500, 502, 503, 504}:
                 raise RuntimeError(
@@ -412,6 +526,13 @@ def _nvidia_chat(
             text = "".join(chunks).strip()
             if not text:
                 raise RuntimeError("NVIDIA API returned an empty streamed response")
+            # When server-side XGrammar was requested but the endpoint didn't support
+            # it, validate the response client-side so the schema guarantee still holds.
+            if use_guided_json and not guided_json_active and not _xgrammar_validate(text):
+                raise RuntimeError(
+                    "XGrammar client-side validation failed: "
+                    "response does not conform to the JSON output schema; will retry"
+                )
             return text
         except Exception as exc:  # noqa: BLE001
             last_error = exc
@@ -437,6 +558,7 @@ def _build_messages(
     reference_context: str = "",
     task_mode: str = "correctness",
     target_speedup: float = DEFAULT_TARGET_SPEEDUP,
+    use_guided_json: bool = True,
 ) -> list[dict[str, str]]:
     user_parts = [item["instruction"]]
     item_input = item.get("input", "") or ""
@@ -544,7 +666,8 @@ def _build_messages(
             )
         user_parts.append("\n".join(history_lines))
 
+    system_prompt = PROMPT_HEADER_GUIDED if use_guided_json else PROMPT_HEADER
     return [
-        {"role": "system", "content": PROMPT_HEADER},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": "\n\n".join(user_parts)},
     ]
