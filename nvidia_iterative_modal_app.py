@@ -77,6 +77,8 @@ FALLBACK_SECRET_NAME = os.environ.get("TRITONBENCH_LLM_SECRET", "tritonbench-llm
 # NVIDIA endpoint.
 # --------------------------------------------------------------------------- #
 
+# TritonBench eval scripts use hardcoded local paths and python interpreter lookups
+# that break inside Modal containers; these patches redirect them to REPO_DIR and sys.executable.
 PATCH_CALL_ACC = (
     f"""sed -i """
     f"""-e 's|^statis_path = .*|statis_path = "{REPO_DIR}/data/TritonBench_T_v1.jsonl"|' """
@@ -92,11 +94,15 @@ PATCH_EXE_ACC = (
     f"""{REPO_DIR}/EVAL/eval_T/1_exe_acc.py"""
 )
 
+# The original script auto-detects GPU count; force 1 so each Modal container only uses its assigned GPU.
 PATCH_PERF = (
     f"""sed -i 's|^gpu_count = .*|gpu_count = 1|' """
     f"""{REPO_DIR}/performance_metrics/perf_T/run_bench/multiprocess_gpu_run.py"""
 )
 
+# Generation only calls the NVIDIA API (no GPU needed), so it runs on a cheap CPU image.
+# Keeping it separate from the GPU image cuts cold-start time and avoids shipping
+# torch/triton to containers that don't benchmark anything.
 cpu_image = (
     modal.Image.debian_slim(python_version="3.12")
     .apt_install("git")
@@ -143,7 +149,7 @@ def _parse_dotenv(path: Path) -> dict[str, str]:
         if not line or line.startswith("#") or "=" not in line:
             continue
         if line.startswith("export "):
-            line = line[len("export ") :].strip()
+            line = line[len("export ") :].strip()  # handle shell-style `export KEY=value` lines
         key, value = line.split("=", 1)
         key = key.strip()
         value = value.strip()
@@ -209,8 +215,10 @@ def _extract_code(text: str) -> str:
 def _sanitize_generated_code(code: str) -> str:
     """Remove common model artifacts without changing intended logic."""
     s = code or ""
+    # FIM (fill-in-middle) tokens appear when the model confuses completion with chat mode.
     s = re.sub(r"<\|(?:fim_prefix|fim_middle|fim_suffix|fim_pad)\|>", "", s)
     s = re.sub(r"<\|(?:repo_name|file_sep|endoftext)\|>", "", s)
+    # Known model typos for "triton" observed in generated output.
     s = re.sub(r"\btritorion\b", "triton", s)
     s = re.sub(r"\btritonion\b", "triton", s)
     s = re.sub(r"^python\s*\n", "", s.strip())
@@ -250,6 +258,9 @@ def _phase2_passed(feedback: dict[str, Any] | None) -> bool:
 
 
 def _gpu_issue_feedback(feedback: dict[str, Any] | None) -> bool:
+    # Detects kernels that passed small correctness tests but caused a GPU/container
+    # fault during the larger perf benchmark. These need to be regenerated with better
+    # masking rather than carried forward, since the fault hides their true behaviour.
     if not feedback:
         return False
 
@@ -297,6 +308,8 @@ def _is_triton_jit_decorator(node: ast.expr) -> bool:
 
 
 def _triton_jit_boolop_errors(tree: ast.AST) -> list[str]:
+    # Triton JIT kernels do not support Python's `and`/`or` boolean operators; they raise
+    # UnsupportedLanguageConstruct at compile time. Models frequently generate them anyway.
     errors: list[str] = []
     for node in ast.walk(tree):
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -315,6 +328,8 @@ def _triton_jit_boolop_errors(tree: ast.AST) -> list[str]:
 
 
 def _static_validate_code(code: str, instruction: str = "") -> list[str]:
+    # Pre-execution AST check so obviously broken code never reaches the GPU subprocess,
+    # keeping error feedback cheaper and the call_acc_dir clean.
     errors: list[str] = []
     if not code.strip():
         return ["generated code is empty"]
@@ -502,6 +517,7 @@ def _nvidia_chat(
                 stream=True,
                 timeout=(30, request_timeout_seconds),
             )
+                    # 408/409/429/5xx are transient; raising here lets the retry loop handle them.
             if response.status_code in {408, 409, 429, 500, 502, 503, 504}:
                 raise RuntimeError(
                     f"NVIDIA API retryable status {response.status_code}: "
@@ -704,6 +720,8 @@ def _metadata_by_file() -> dict[str, dict[str, Any]]:
 
 
 def _reference_context_for_file(file_name: str, char_limit: int) -> str:
+    # Each reference file in TritonBench_T_v1 embeds the reference PyTorch implementation
+    # above the 146-`#` delimiter and the test harness below it; we only want the former.
     delimiter = "#" * 146
     module_path = Path(REPO_DIR) / "data/TritonBench_T_v1" / file_name
     parts: list[str] = []
@@ -935,8 +953,8 @@ def generate_iteration(
         script_path.parent.mkdir(parents=True, exist_ok=True)
         script_path.write_text(code, encoding="utf-8")
 
-        # Keep "instruction" first; TritonBench's 0_call_acc.py uses the first
-        # key in each JSON object to map a row back to its reference file.
+        # "instruction" must be first: TritonBench's 0_call_acc.py reads the first
+        # key of each JSON object to map the row back to its reference file.
         record = {
             "instruction": item["instruction"],
             "predict": code,
@@ -948,6 +966,9 @@ def generate_iteration(
             record["generation_error"] = error
         return idx, record
 
+    # First pass: reuse existing records or carry-forward passing kernels to avoid
+    # burning API quota on operators that already work. Only truly new or broken
+    # items end up in `pending` for the concurrent generation step.
     results: list[dict[str, Any] | None] = [None] * len(items)
     pending: list[tuple[int, dict[str, Any], str]] = []
     gpu_issue_regenerations = 0
@@ -1235,6 +1256,8 @@ def _analyze_perf_results(perf_results_dir: Path) -> dict[str, dict[str, Any]]:
     analysis: dict[str, dict[str, Any]] = {}
 
     for gen_path in sorted(perf_results_dir.rglob("*.json")):
+        # Intermediate per-batch result dirs are siblings of perf_results_dir, not children,
+        # but skip any stray batch dir that lands inside to avoid double-counting.
         if "perf_batches" in gen_path.parts:
             continue
         file_name = _perf_file_name_from_json(gen_path)
@@ -1338,6 +1361,8 @@ def _analyze_perf_results(perf_results_dir: Path) -> dict[str, dict[str, Any]]:
 
         speedup = round(ref_sum / gen_sum, 4)
         record["speedup_vs_pytorch"] = speedup
+        # TritonBench's 2_efficiency.py only counts speedups in (0.1, 10); values outside
+        # that range are treated as measurement artifacts and excluded from the aggregate.
         if 0.1 < speedup < 10:
             record["status"] = "accepted"
             record["message"] = "Speedup accepted by TritonBench range filter."
@@ -1564,6 +1589,8 @@ def evaluate_iteration(
 
         # Phase 1: generated module plus the official generated test body must run.
         print("\n=== Phase 1: call accuracy ===", flush=True)
+        # TritonBench uses exactly 146 `#` characters as the separator between the
+        # generated module and the test body inside each eval file.
         delimiter = "#" * 146
         for idx, (script_content, test_content, file_name) in enumerate(
             zip(predictions, tests, files), start=1
@@ -1680,6 +1707,8 @@ def evaluate_iteration(
         )
         data_volume.commit()
 
+    # Kernels carried forward unchanged already have a valid Phase 3 result from the
+    # prior iteration. Reuse it so we don't waste GPU time re-benchmarking identical code.
     reused_perf_analysis: dict[str, dict[str, Any]] = {}
     reused_perf_files: set[str] = set()
     for file_name in exec_survivors:
@@ -1799,6 +1828,9 @@ def evaluate_iteration(
                     f"[perf batch: {', '.join(file_names)}]\nresumed completed batch"
                 )
                 continue
+            # If a batch was "started" but not "done", the container crashed during
+            # the perf run (GPU fault or OOM). Mark it skipped so the next resume
+            # doesn't retry the same kernel and crash again.
             if previous_state.get("status") == "started":
                 message = (
                     "skipped because this batch killed a previous evaluator "
@@ -2018,6 +2050,8 @@ def _score_feedback(
     feedback: dict[str, Any] | None,
     iteration: int,
 ) -> tuple[int, float, int, int, int]:
+    # Lexicographic priority: execution correctness > accepted speedup > call accuracy
+    # > static validity > later iteration (tie-break so the newest correct version wins).
     if not feedback:
         return (0, -1.0, 0, 0, iteration)
     phase2 = 1 if feedback.get("phase2_exec_passed") else 0
@@ -2426,6 +2460,9 @@ def main(
 
         _print_iteration_summary(summary)
 
+        # Between iterations, replace the previous-iteration baseline with the
+        # cross-iteration best so each new generation refines the best-known version
+        # per file rather than only the most recent one.
         if use_best_so_far and iteration < iterations:
             interim_best = materialize_best_versions.remote(
                 run_id=run_id,
