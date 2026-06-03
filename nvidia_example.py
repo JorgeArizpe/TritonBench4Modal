@@ -1,17 +1,21 @@
 
-import requests, base64
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 invoke_url = "https://integrate.api.nvidia.com/v1/chat/completions"
 stream = True
 
 
 headers = {
-  "Authorization": "Bearer ${NVIDIA_KEY}",
+  "Authorization": f"Bearer {os.getenv('NVIDIA_KEY')}",
   "Accept": "text/event-stream" if stream else "application/json"
 }
 
 payload = {
-  "model": "mistralai/mistral-large-3-675b-instruct-2512",
+  "model": "qwen/qwen3-coder-480b-a35b-instruct",
   "messages": [{"role":"user","content":"Hello"}],
   "max_tokens": 2048,
   "temperature": 0.15,
