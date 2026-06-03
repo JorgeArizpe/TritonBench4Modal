@@ -129,16 +129,57 @@ data_volume = modal.Volume.from_name(VOLUME_NAME, create_if_missing=True)
 # Generation — LLM-based PyTorch → Triton translation
 # --------------------------------------------------------------------------- #
 
+# PROMPT_HEADER = (
+#     "You are an expert in Triton programming, capable of writing Triton kernels "
+#     "and wrapper functions based on functional descriptions and function "
+#     "parameters. The wrapper function must fully match the provided function "
+#     "signature.\n\n"
+#     "Output a single, self-contained Python module containing: (a) the necessary "
+#     "imports (torch, triton, triton.language as tl), (b) the Triton kernel(s), "
+#     "and (c) the wrapper function that the description specifies. Wrap the "
+#     "entire module in one ```python ... ``` fenced code block. Do NOT include "
+#     "any test code or example calls — tests will be appended separately."
+# )
+
 PROMPT_HEADER = (
-    "You are an expert in Triton programming, capable of writing Triton kernels "
-    "and wrapper functions based on functional descriptions and function "
-    "parameters. The wrapper function must fully match the provided function "
-    "signature.\n\n"
+    "You are an expert in Triton GPU programming using triton==3.1.0 and torch==2.5.1.\n\n"
+
+    "STRICT RULES — violating any of these will cause a runtime crash:\n\n"
+
+    # Corrige: AttributeError: module 'triton.language' has no attribute 'kernel'
+    "1. Always decorate kernels with @triton.jit. "
+    "NEVER use @tl.kernel or @tl.jit — those decorators do not exist.\n\n"
+
+    # Corrige: AttributeError: module 'triton' has no attribute 'cudagraphs'
+    "2. Only use APIs that exist in triton 3.1.0: triton.jit, triton.cdiv, "
+    "tl.program_id, tl.load, tl.store, tl.arange, tl.zeros, tl.dot, tl.exp, "
+    "tl.log, tl.sqrt, tl.maximum, tl.minimum, tl.where, tl.sum, tl.max. "
+    "NEVER invent attributes like triton.cudagraphs, triton.Config, "
+    "tl.kernel, or any other name you are not certain exists.\n\n"
+
+    # Corrige: IndexError: tuple index out of range (grid mal indexado)
+    "3. Launch kernels as: kernel[grid](args...) where grid is a tuple of ints "
+    "or a lambda, for example: kernel[(n_blocks,)](args...). "
+    "NEVER write kernel[grid[0]](...) or kernel[grid[i]](...).\n\n"
+
+    # Corrige: RuntimeError: Cannot call @triton.jit'd outside of the scope of a kernel
+    "4. @triton.jit kernels are launched ONLY from Python host code using the "
+    "bracket syntax above. NEVER call a @triton.jit function from inside "
+    "another @triton.jit kernel.\n\n"
+
+    # Corrige: AttributeError: 'str' object has no attribute 'dtype'
+    "5. Kernel arguments must be tensors or plain Python ints/floats. "
+    "NEVER pass strings, tuples, lists, or Python enums as kernel arguments. "
+    "If the wrapper receives a string parameter (e.g. rounding_mode='floor'), "
+    "convert it to an int flag before passing it to the kernel.\n\n"
+
+    "OUTPUT FORMAT:\n"
     "Output a single, self-contained Python module containing: (a) the necessary "
-    "imports (torch, triton, triton.language as tl), (b) the Triton kernel(s), "
-    "and (c) the wrapper function that the description specifies. Wrap the "
-    "entire module in one ```python ... ``` fenced code block. Do NOT include "
-    "any test code or example calls — tests will be appended separately."
+    "imports (torch, triton, triton.language as tl), (b) the Triton kernel(s) "
+    "decorated with @triton.jit, and (c) the wrapper function that fully matches "
+    "the provided signature. Wrap the entire module in one ```python ... ``` "
+    "fenced code block. Do NOT include any test code or example calls — "
+    "tests will be appended separately."
 )
 
 
