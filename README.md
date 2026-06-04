@@ -24,7 +24,7 @@ iterations, and writes a final best-version prediction set.
 |-- best_versions.py        # Best-version selection and materialization
 |-- formatting.py           # Console summary formatting
 |-- requirements.txt        # Local Python dependencies
-|-- requirements-local.txt  # Compatibility requirements file
+|-- agentic/                # Experimental bounded tool-using repair runner
 `-- misc/
     |-- archive/            # Archived old scripts/examples
     `-- statistic_analysis/ # Saved JSONs, plots, reports, and analysis scripts
@@ -38,34 +38,37 @@ Run the app through `main.py`:
 py -m modal run main.py
 ```
 
+Pass local-entrypoint options directly after the file path. Do not insert an
+extra `--` separator before options.
+
 Smoke test the first five simple-dataset items:
 
 ```bash
-py -m modal run main.py -- --limit 5
+py -m modal run main.py --limit 5
 ```
 
 Run the complex instruction set:
 
 ```bash
-py -m modal run main.py -- --dataset comp
+py -m modal run main.py --dataset comp
 ```
 
 Run one iteration only:
 
 ```bash
-py -m modal run main.py -- --iterations 1
+py -m modal run main.py --iterations 1
 ```
 
 Use a fixed run id for repeatable artifact paths and resume behavior:
 
 ```bash
-py -m modal run main.py -- --run-id my-run-001
+py -m modal run main.py --run-id my-run-001
 ```
 
 Skip performance benchmarking:
 
 ```bash
-py -m modal run main.py -- --skip-efficiency
+py -m modal run main.py --skip-efficiency
 ```
 
 Download artifacts after a run:
@@ -256,7 +259,7 @@ When enabled:
 Disable guided JSON for comparison:
 
 ```bash
-py -m modal run main.py -- --use-guided-json false
+py -m modal run main.py --use-guided-json false
 ```
 
 ## Static Validation
@@ -377,6 +380,8 @@ Both scripts use only the Python standard library.
 ## Current Notes
 
 - `main.py` is the active entrypoint.
+- `agentic/` contains the experimental bounded tool-using repair runner; see
+  `agentic/README.md`.
 - The older monolithic scripts are archived under `misc/archive/`.
 - No `nvidia_iterative_modal_app.py` file exists in the current repo structure.
 
