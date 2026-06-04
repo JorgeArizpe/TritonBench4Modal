@@ -1,72 +1,100 @@
 # TritonBench-T NVIDIA Iterative Runner
 
 This repository runs TritonBench-T on Modal with an iterative NVIDIA
-chat-completions generation loop. The main script is
-`nvidia_iterative_modal_app.py`.
+chat-completions generation, evaluation, and refinement loop. The app has been
+split into focused Python modules; the active local entrypoint is `main.py`.
 
-The pipeline generates Triton kernels, evaluates them against TritonBench-T,
-feeds per-file feedback back into the model, repeats for multiple iterations,
-and writes a final best-version prediction set.
+The pipeline generates Triton kernels from TritonBench-T instructions, evaluates
+them, feeds per-file feedback back into the model, repeats for multiple
+iterations, and writes a final best-version prediction set.
 
-## Project Files
+## Repository Layout
 
 ```text
 .
-|-- nvidia_iterative_modal_app.py   # Main Modal app and local entrypoint
-|-- old_modal_app.py                # Older single-pass baseline app kept locally
-|-- nvidia_example.py               # Minimal NVIDIA API example
-|-- requirements-local.txt          # Local Modal dependency
-|-- jsons/                          # Saved JSON artifacts from prior runs
-|-- plots/                          # Saved plots
-|-- reports/                        # Saved report output
-`-- scripts/                        # Local plotting/report scripts
+|-- main.py                 # Modal local entrypoint
+|-- modal_app.py            # Modal app, images, volume, local source packaging
+|-- config.py               # Shared constants, defaults, image patch commands
+|-- llm_secrets.py          # NVIDIA key and Modal Secret resolution
+|-- code_utils.py           # Prompting, NVIDIA API calls, code extraction, validation
+|-- data_utils.py           # TritonBench data loading and file mapping
+|-- generation.py           # generate_iteration Modal function
+|-- evaluation.py           # evaluate_iteration Modal function
+|-- perf_utils.py           # Performance subprocess and JSON helpers
+|-- best_versions.py        # Best-version selection and materialization
+|-- formatting.py           # Console summary formatting
+|-- requirements.txt        # Local Python dependencies
+|-- requirements-local.txt  # Compatibility requirements file
+`-- misc/
+    |-- archive/            # Archived old scripts/examples
+    `-- statistic_analysis/ # Saved JSONs, plots, reports, and analysis scripts
 ```
 
-`README.md` is the only README in this workspace.
+## Entry Point
 
-## What The Pipeline Does
+Run the app through `main.py`:
 
-`nvidia_iterative_modal_app.py` defines one local entrypoint, `main`, and three
-remote Modal functions:
+```bash
+py -m modal run main.py
+```
 
-- `generate_iteration`: calls NVIDIA's chat-completions endpoint and writes one
-  prediction set for an iteration.
-- `evaluate_iteration`: runs static validation, call accuracy, execution
-  accuracy, and optional performance benchmarking.
-- `materialize_best_versions`: selects the best generated version found for
-  each TritonBench file and writes the final artifacts.
+Smoke test the first five simple-dataset items:
 
-By default the loop runs for three iterations. Each new iteration can use the
-best version found so far plus feedback from previous failures or benchmark
-results.
+```bash
+py -m modal run main.py -- --limit 5
+```
+
+Run the complex instruction set:
+
+```bash
+py -m modal run main.py -- --dataset comp
+```
+
+Run one iteration only:
+
+```bash
+py -m modal run main.py -- --iterations 1
+```
+
+Use a fixed run id for repeatable artifact paths and resume behavior:
+
+```bash
+py -m modal run main.py -- --run-id my-run-001
+```
+
+Skip performance benchmarking:
+
+```bash
+py -m modal run main.py -- --skip-efficiency
+```
+
+Download artifacts after a run:
+
+```bash
+py -m modal volume get tritonbench-t-data nvidia_iterative_runs/my-run-001 ./local-my-run-001
+```
 
 ## Local Setup
 
-Install the local Modal dependency:
+Install local dependencies and authenticate Modal:
 
 ```bash
-pip install -r requirements-local.txt
+pip install -r requirements.txt
 modal setup
 ```
 
-`requirements-local.txt` currently contains:
-
-```text
-modal>=0.66
-```
 
 ## NVIDIA Credentials
 
-The app reads NVIDIA credentials in this order:
+`llm_secrets.py` resolves NVIDIA credentials in this order:
 
 1. `NVIDIA_KEY` from the local environment.
 2. `NVIDIA_API_KEY` from the local environment.
-3. `NVIDIA_KEY` or `NVIDIA_API_KEY` from a local `.env` file next to
-   `nvidia_iterative_modal_app.py`.
+3. `NVIDIA_KEY` or `NVIDIA_API_KEY` from `.env` next to the Python modules.
 4. A Modal secret named by `TRITONBENCH_LLM_SECRET`, defaulting to
    `tritonbench-llm`.
 
-Example local `.env`:
+Example `.env`:
 
 ```text
 NVIDIA_KEY=nvapi-...
@@ -84,65 +112,20 @@ Use a different Modal secret name with:
 export TRITONBENCH_LLM_SECRET=my-secret-name
 ```
 
-## Run Commands
-
-Smoke test the first five simple-dataset items:
-
-```bash
-py -m modal run nvidia_iterative_modal_app.py -- --limit 5
-```
-
-Run the default full job:
-
-```bash
-py -m modal run nvidia_iterative_modal_app.py
-```
-
-Run the complex instruction set:
-
-```bash
-py -m modal run nvidia_iterative_modal_app.py -- --dataset comp
-```
-
-Run one iteration:
-
-```bash
-py -m modal run nvidia_iterative_modal_app.py -- --iterations 1
-```
-
-Use a fixed run id for repeatable artifact paths and resume behavior:
-
-```bash
-py -m modal run nvidia_iterative_modal_app.py -- --run-id my-run-001
-```
-
-Skip performance benchmarking and only measure static, call, and execution
-correctness:
-
-```bash
-py -m modal run nvidia_iterative_modal_app.py -- --skip-efficiency
-```
-
-Download run artifacts:
-
-```bash
-py -m modal volume get tritonbench-t-data nvidia_iterative_runs/my-run-001 ./local-my-run-001
-```
-
 ## Defaults
 
-The current defaults are defined near the top of
-`nvidia_iterative_modal_app.py`.
+Defaults live in `config.py` and `generation.py`.
 
 | Setting | Default |
 | --- | --- |
 | Modal app name | `tritonbench-t-nvidia-iterative` |
 | TritonBench repo | `https://github.com/thunlp/TritonBench.git` |
 | Modal volume | `tritonbench-t-data` |
+| Remote data dir | `/data` |
+| Remote TritonBench repo dir | `/opt/TritonBench` |
 | Run directory | `nvidia_iterative_runs` |
-| Dataset | `simp` |
-| GPU | `T4` from `TRITONBENCH_GPU` |
-| Model | `qwen/qwen3-coder-480b-a35b-instruct` from `NVIDIA_MODEL` |
+| GPU | `T4`, overridable with `TRITONBENCH_GPU` |
+| Model | `qwen/qwen3-coder-480b-a35b-instruct`, overridable with `NVIDIA_MODEL` |
 | Iterations | `3` |
 | Generation concurrency | `4` |
 | Max tokens | `4096` |
@@ -154,18 +137,19 @@ The current defaults are defined near the top of
 | Reference source character limit | `6000` |
 | Use best so far | `true` |
 | Refine passing kernels | `false` |
-| Repair perf failures | `false` |
+| Repair performance failures | `false` |
 | Max feedback history | `2` |
 | Force regenerate | `false` |
 | Loop mode | `auto` |
 | Target speedup | `1.0` |
-| Auto optimize minimum exec rate | `1.0` |
-| Perf batch size | `8` |
+| Auto optimize minimum execution rate | `1.0` |
+| Performance batch size | `8` |
 | Skip efficiency | `false` |
+| Guided JSON output | `true` |
 
 ## CLI Options
 
-`main` accepts these options:
+`main.py` exposes these options:
 
 | Option | Meaning |
 | --- | --- |
@@ -178,7 +162,7 @@ The current defaults are defined near the top of
 | `--temperature` | Sampling temperature for NVIDIA requests. |
 | `--request-timeout-seconds` | Read timeout for each NVIDIA request. |
 | `--retries` | Retry count for each NVIDIA request. |
-| `--checkpoint-every` | Volume commit frequency during generation. |
+| `--checkpoint-every` | Modal volume commit frequency during generation. |
 | `--include-reference-source` | Include reference implementation/context in prompts. |
 | `--reference-source-char-limit` | Character limit for reference context. |
 | `--use-best-so-far` | Feed interim best predictions into later iterations. |
@@ -191,37 +175,36 @@ The current defaults are defined near the top of
 | `--auto-optimize-min-exec-rate` | Exec-accuracy threshold before `auto` mode optimizes passing kernels. |
 | `--perf-batch-size` | Number of execution-correct kernels per performance batch. |
 | `--skip-efficiency` | Skip Phase 3 performance benchmarking. |
+| `--use-guided-json` | Ask supported endpoints for JSON output with a `python_code` field. |
 | `--run-id` | Artifact directory name. Defaults to a UTC timestamp. |
 
-## Remote Images
+## Modal Images
 
-The CPU generation image uses Debian slim with Python 3.12 and installs:
+`modal_app.py` defines two images.
 
-```text
-git
-requests>=2.32
-```
-
-The GPU evaluation image uses:
+CPU generation image:
 
 ```text
-nvidia/cuda:12.4.1-devel-ubuntu22.04
-Python 3.12
-git
-build-essential
-torch==2.5.1
-triton==3.1.0
-tqdm==4.66.5
-numpy<2
-requests>=2.32
+debian_slim(python_version="3.12")
+apt: git
+pip: requests>=2.32, xgrammar>=0.1.14
 ```
 
-Both images clone `https://github.com/thunlp/TritonBench.git` into
-`/opt/TritonBench`.
+GPU evaluation image:
+
+```text
+nvidia/cuda:12.4.1-devel-ubuntu22.04 with Python 3.12
+apt: git, build-essential
+pip: torch==2.5.1, triton==3.1.0, tqdm==4.66.5, numpy<2, requests>=2.32
+```
+
+Both images clone TritonBench into `/opt/TritonBench`. `modal_app.py` also calls
+`add_local_python_source` for the helper modules that Modal containers need at
+import time.
 
 ## TritonBench Patches
 
-During image build, the app patches TritonBench paths and runtime assumptions:
+`config.py` defines patch commands applied during image build:
 
 - `EVAL/eval_T/0_call_acc.py`
   - Uses `/opt/TritonBench/data/TritonBench_T_v1.jsonl`.
@@ -238,48 +221,68 @@ modules named `call_acc.py` and `exe_acc.py`.
 
 ## Generation
 
-Generation runs in `generate_iteration` on the CPU image. For each selected
-TritonBench item it:
+`generation.py` defines `generate_iteration`, which runs on the CPU image. It:
 
-1. Builds chat messages from the Alpaca instruction.
-2. Optionally adds reference source context.
-3. Optionally adds previous generated code and feedback.
-4. Calls `https://integrate.api.nvidia.com/v1/chat/completions` with streaming
-   enabled.
-5. Extracts a Python module from a `python` Markdown code block when present.
-6. Sanitizes common model artifacts and misspellings.
-7. Writes generated scripts, prompts, generation records, and
-   `predictions.jsonl`.
+1. Loads the selected TritonBench-T Alpaca dataset.
+2. Maps each instruction to a TritonBench file.
+3. Builds prompts with `code_utils._build_messages`.
+4. Optionally includes reference context from the matching TritonBench file.
+5. Optionally includes previous code, prior feedback, and feedback history.
+6. Calls NVIDIA's chat-completions endpoint through `code_utils._nvidia_chat`.
+7. Extracts/sanitizes generated Python code.
+8. Writes prompts, generated scripts, generation records, and `predictions.jsonl`.
 
-The prompt requires a single self-contained Python module with imports for
-`torch`, `triton`, and `triton.language as tl`, Triton kernels, and the requested
-wrapper function. It forbids tests, examples, prose outside the code block,
-fill-in-middle tokens, file I/O, network calls, and benchmark harness code.
+Generation reuses existing records unless `--force-regenerate` is set. Passing
+kernels can be carried forward to avoid spending API quota on already-correct
+outputs.
+
+## Guided JSON Output
+
+The current modularized app includes a guided JSON mode, enabled by default with
+`DEFAULT_USE_GUIDED_JSON = True` in `generation.py`.
+
+When enabled:
+
+- `code_utils.py` defines a JSON schema requiring a single `python_code` string.
+- The request sends `extra_body: {"guided_json": schema}` to endpoints that
+  support the vLLM/NIM extension.
+- If the endpoint returns HTTP 400 for guided JSON, the model is cached as
+  unsupported for the current run and requests continue without server-side
+  guidance.
+- If `xgrammar` is available locally in the generation container, the response
+  can be checked client-side against the same JSON schema.
+- `_extract_code` handles both JSON responses and markdown fenced code.
+
+Disable guided JSON for comparison:
+
+```bash
+py -m modal run main.py -- --use-guided-json false
+```
 
 ## Static Validation
 
-Before generated code is executed, `evaluate_iteration` performs static checks:
+`code_utils._static_validate_code` checks generated code before GPU execution:
 
 - Empty generated code.
 - Leftover model special tokens.
 - Common misspellings of `triton`.
-- Python `ast.parse` and compile.
+- Python AST parse and compile.
 - Required wrapper function name from `Wrapper Entry Information`.
-- Python boolean operators inside `@triton.jit` functions, where tensor mask
+- Python boolean operators inside `@triton.jit` functions, where Triton mask
   expressions should use `&`, `|`, and parentheses.
 
-Static validation failures are stored in per-file feedback and can be included
-in later prompts.
+Static validation failures are saved as per-file feedback and can be used in
+later prompts.
 
 ## Evaluation
 
-Evaluation runs in `evaluate_iteration` on the GPU image.
+`evaluation.py` defines `evaluate_iteration`, which runs on the GPU image.
 
 Phase 1: call accuracy
 
 - Concatenates the generated module with the official TritonBench-T test body.
-- Runs the combined script with `CUDA_VISIBLE_DEVICES=0`.
-- Keeps scripts that execute successfully.
+- Executes the combined script on GPU 0.
+- Keeps scripts that run successfully.
 
 Phase 2: execution accuracy
 
@@ -289,34 +292,32 @@ Phase 2: execution accuracy
 
 Phase 3: efficiency
 
-- Benchmarks execution-correct kernels unless `--skip-efficiency true` is set.
-- Splits performance runs into batches controlled by `--perf-batch-size`.
-- Runs TritonBench's performance script writer and GPU runner.
-- Matches generated performance JSON files to golden performance JSON files.
+- Runs unless `--skip-efficiency` is set.
+- Benchmarks execution-correct kernels in batches controlled by
+  `--perf-batch-size`.
+- Uses TritonBench performance scripts under `performance_metrics/perf_T`.
+- Compares generated perf JSON files against golden perf JSON files.
 - Computes per-file speedups and accepts values where `0.1 < speedup < 10`.
-- Reuses prior performance results for carried-forward kernels when available.
+- Reuses prior performance feedback for carried-forward kernels when available.
 
-## Iteration And Carry-Forward Behavior
+## Iteration Strategy
 
 The loop can carry forward already-correct kernels instead of regenerating them:
 
 - Execution-correct kernels are carried forward by default.
-- `--refine-passing true` allows passing kernels to be regenerated.
-- `--loop-mode correctness` prioritizes correctness.
+- `--refine-passing` allows passing kernels to be regenerated.
+- `--loop-mode correctness` prioritizes correctness repair.
 - `--loop-mode optimize` optimizes execution-correct kernels.
 - `--loop-mode auto` optimizes only after the previous execution rate reaches
   `--auto-optimize-min-exec-rate`.
 - Kernels with GPU-fault-like feedback are regenerated, because the larger
   performance benchmark may have exposed unsafe memory access.
-
-`--use-best-so-far true` materializes interim best predictions between
-iterations and uses them as the starting point for the next iteration.
+- `--use-best-so-far` materializes interim best predictions between iterations
+  and uses them as the next iteration baseline.
 
 ## Artifacts
 
 Artifacts are written to the Modal volume `tritonbench-t-data`.
-
-Run-level layout:
 
 ```text
 nvidia_iterative_runs/<run_id>/
@@ -354,38 +355,30 @@ Important files:
 
 ## Resume Behavior
 
-The runner can reuse saved work when a run id is reused:
+Reusing a `--run-id` lets the runner reuse saved work:
 
-- Existing generation records are reused unless `--force-regenerate true`.
+- Existing generation records are reused unless `--force-regenerate` is set.
 - Generation errors can be retried.
 - Volume commits happen during generation according to `--checkpoint-every`.
 - Phase 1 and Phase 2 write `phase12_checkpoint.json`.
 - Phase 3 writes `perf_batches/batch_state.json`.
-- A batch previously marked `started` is treated as a likely evaluator-container
-  crash and is marked `skipped_after_crash` on resume.
+- A perf batch previously marked `started` is treated as a likely
+  evaluator-container crash and is marked `skipped_after_crash` on resume.
 
-## Console Output
+## Local Analysis Scripts
 
-The local run prints:
+Archived analysis scripts live under `misc/statistic_analysis/scripts/`:
 
-- Run configuration.
-- Per-iteration prediction path.
-- Call and execution accuracy counts.
-- Efficiency aggregate and computed mean speedups.
-- Per-file performance status.
-- Non-execution-correct files with compact failure reasons.
-- Final best-version summary.
-- A `modal volume get` command for downloading artifacts.
+- `plot_iteration_metrics.py`
+- `report_iteration_stats.py`
 
-Full details are stored in JSON artifacts in the Modal volume.
+Both scripts use only the Python standard library.
 
-## Notes
+## Current Notes
 
-- There is no grammar-guided decoding or xGrammar integration in the current
-  script.
-- The only documented primary entrypoint is `nvidia_iterative_modal_app.py`.
-- `old_modal_app.py` exists locally as an older baseline file, but this README
-  documents the NVIDIA iterative runner.
+- `main.py` is the active entrypoint.
+- The older monolithic scripts are archived under `misc/archive/`.
+- No `nvidia_iterative_modal_app.py` file exists in the current repo structure.
 
 ## References
 
