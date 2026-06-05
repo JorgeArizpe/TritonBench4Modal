@@ -1,3 +1,4 @@
 modal>=0.66
+ollama>=0.6.2
 requests>=2.32
 xgrammar>=0.1.14
