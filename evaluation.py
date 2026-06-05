@@ -40,6 +40,7 @@ from perf_utils import (
 
 
 def _ensure_eval_imports() -> None:
+    # Dynamically inject the TritonBench EVAL directory into sys.path so the upstream modules can be imported.
     eval_dir = f"{REPO_DIR}/EVAL/eval_T"
     if eval_dir not in sys.path:
         sys.path.insert(0, eval_dir)
@@ -69,6 +70,7 @@ def evaluate_iteration(
     if not pred_full.exists():
         raise FileNotFoundError(f"predictions file not found: {pred_full}")
 
+    # Prepare the output directory for this iteration's evaluation results.
     iter_dir = Path(DATA_DIR) / RUNS_DIR / run_id / f"iter_{iteration:02d}"
     results_dir = iter_dir / "results"
     call_acc_dir = results_dir / "call_acc"
@@ -82,6 +84,7 @@ def evaluate_iteration(
 
     print(f"Evaluating iteration {iteration}: {predictions_path}", flush=True)
 
+    # Read predictions and extract the TritonBench test scripts mapped to each file.
     predictions, tests, files = call_acc.get_codes_for_test(str(pred_full))
     prediction_records = _load_predictions(pred_full)
     instruction_by_file = {
@@ -98,12 +101,14 @@ def evaluate_iteration(
             dict,
         )
     }
+    # Identify files that we already know passed execution correctness from a prior iteration.
     cached_correctness_files = {
         file_name
         for file_name, prior_feedback in carried_forward_feedback_by_file.items()
         if prior_feedback.get("phase2_exec_passed")
     }
     total = len(files)
+    # Initialize the default feedback structure for all files.
     feedback: dict[str, dict[str, Any]] = {
         file_name: {
             "file": file_name,
@@ -122,6 +127,7 @@ def evaluate_iteration(
     }
 
     if resume_phase12:
+        # Load a prior Phase 1 & 2 checkpoint if the run was interrupted (e.g., by a timeout).
         phase12_checkpoint = json.loads(
             phase12_checkpoint_path.read_text(encoding="utf-8")
         )
@@ -155,6 +161,7 @@ def evaluate_iteration(
             zip(predictions, tests, files), start=1
         ):
             if file_name in cached_correctness_files:
+                # Skip Phase 1 for carried-forward files and populate their feedback from cache.
                 prior_feedback = carried_forward_feedback_by_file[file_name]
                 feedback[file_name]["phase1_call_passed"] = True
                 feedback[file_name]["phase2_exec_passed"] = True
@@ -174,6 +181,7 @@ def evaluate_iteration(
                     print(f"  phase 1 checked {idx}/{total}", flush=True)
                 continue
 
+            # Run static validation to catch syntax/compilation errors without wasting GPU time.
             static_errors = _static_validate_code(
                 script_content,
                 instruction_by_file.get(file_name, ""),
@@ -196,6 +204,7 @@ def evaluate_iteration(
                 script_content + "\n" + delimiter + "\n" + test_content,
                 encoding="utf-8",
             )
+            # Run the combined module + test script in a clean subprocess.
             run_result = _run_python_file(
                 temp_path, gpu_id=0, timeout_seconds=per_script_timeout_seconds
             )
@@ -215,6 +224,7 @@ def evaluate_iteration(
         gold_folder = Path(REPO_DIR) / "data/TritonBench_T_v1"
         for idx, file_name in enumerate(call_survivors, start=1):
             if file_name in cached_correctness_files:
+                # Skip Phase 2 for carried-forward files.
                 feedback[file_name]["phase2_exec_passed"] = True
                 if idx % 10 == 0 or idx == len(call_survivors):
                     print(f"  phase 2 checked {idx}/{len(call_survivors)}", flush=True)
@@ -222,6 +232,7 @@ def evaluate_iteration(
 
             generated_path = call_acc_dir / file_name
             gold_path = gold_folder / file_name
+            # Run both the generated script and the golden reference, checking if stdout matches.
             generated_run = _run_python_file(
                 generated_path, gpu_id=0, timeout_seconds=per_script_timeout_seconds
             )
@@ -254,6 +265,7 @@ def evaluate_iteration(
 
         exec_survivors = sorted(path.name for path in call_acc_dir.glob("*.py"))
         print(f"Phase 2 survivors: {len(exec_survivors)} / {total}", flush=True)
+        # Checkpoint Phase 1 & 2 before starting the long and potentially unstable Phase 3.
         _safe_write_json(
             phase12_checkpoint_path,
             {
@@ -277,6 +289,7 @@ def evaluate_iteration(
             continue
         prior_analysis = prior_feedback.get("phase3_perf_analysis")
         if isinstance(prior_analysis, dict):
+            # If detailed prior analysis exists, port it over entirely.
             prior_status = str(prior_analysis.get("status", "unknown"))
             reused_status = (
                 prior_status
@@ -290,6 +303,7 @@ def evaluate_iteration(
                 + str(prior_analysis.get("message", ""))
             )
         elif isinstance(prior_feedback.get("speedup_vs_pytorch"), (int, float)):
+            # Reconstruct basic analysis properties if only a raw speedup was available.
             reused_perf_analysis[file_name] = {
                 "file": file_name,
                 "result_json": None,
@@ -366,6 +380,7 @@ def evaluate_iteration(
         )
 
         runner_detail_parts: list[str] = []
+        # Group remaining files into batches for efficiency evaluation.
         batches = _chunks(perf_run_survivors, perf_batch_size)
         print(
             f"Phase 3 running {len(perf_run_survivors)} uncached survivor(s) in "
@@ -382,6 +397,7 @@ def evaluate_iteration(
             )
             previous_state = batch_state.get(batch_key, {})
             if previous_state.get("status") == "done":
+                # Skip batches that already completed successfully in a previous interrupted run.
                 _merge_perf_outputs(batch_results_dir, perf_results_dir)
                 runner_detail_parts.append(
                     f"[perf batch: {', '.join(file_names)}]\nresumed completed batch"
@@ -419,12 +435,14 @@ def evaluate_iteration(
                     }
                 continue
 
+            # Mark the batch as started to detect crashes.
             batch_state[batch_key] = {
                 "status": "started",
                 "files": file_names,
             }
             _safe_write_json(batch_state_path, batch_state)
             data_volume.commit()
+            # Execute the batch benchmark.
             runner_detail_parts.append(
                 _run_perf_batch(
                     perf_root=perf_root,
@@ -434,6 +452,7 @@ def evaluate_iteration(
                 )
             )
             _merge_perf_outputs(batch_results_dir, perf_results_dir)
+            # Mark batch completed.
             batch_state[batch_key] = {
                 "status": "done",
                 "files": file_names,
@@ -469,6 +488,7 @@ def evaluate_iteration(
         }
     )
 
+    # Process parsed perf result jsons to evaluate valid speedups.
     accepted_statuses = {"accepted", "reused_accepted"}
     speedups = {
         file_name: record["speedup_vs_pytorch"]
@@ -492,6 +512,7 @@ def evaluate_iteration(
     if speedups:
         speedup_summary = round(sum(speedups.values()) / len(speedups), 2)
         if fresh_accepted_files:
+            # Run TritonBench's native efficiency aggregation script to get their canonical metric string.
             efficiency = subprocess.run(
                 [
                     sys.executable,
@@ -533,6 +554,7 @@ def evaluate_iteration(
             + runner_details
         )
 
+    # Populate the feedback dictionary with the parsed Phase 3 performance analysis.
     for file_name, analysis_record in perf_analysis.items():
         if file_name in feedback:
             feedback[file_name]["phase3_perf_passed"] = (

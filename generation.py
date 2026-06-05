@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
+# Needed config variables
 from config import (
     DATA_DIR,
     DEFAULT_AUTO_OPTIMIZE_MIN_EXEC_RATE,
@@ -89,11 +90,14 @@ def generate_iteration(
 ) -> dict[str, Any]:
     """Generate one complete prediction set for an iteration."""
     _reload_volume()
+    # Validate and normalize the chosen iteration loop mode.
     loop_mode = loop_mode.lower().strip()
     if loop_mode not in {"auto", "correctness", "optimize"}:
         raise ValueError("loop_mode must be one of: auto, correctness, optimize")
     previous_feedback_by_file = previous_feedback_by_file or {}
     previous_feedback_history_by_file = previous_feedback_history_by_file or {}
+    # Calculate the execution pass rate from the previous iteration, used by 'auto' mode
+    # to decide when to switch from correctness fixing to performance optimization.
     previous_exec_rate = (
         sum(1 for item in previous_feedback_by_file.values() if _phase2_passed(item))
         / len(previous_feedback_by_file)
@@ -103,7 +107,9 @@ def generate_iteration(
 
     items = _load_alpaca(dataset)
     if limit:
+        # Apply truncation limit for testing/debugging.
         items = items[:limit]
+    # Map the instructions to their corresponding TritonBench reference file names.
     files = _files_for_instructions([item["instruction"] for item in items])
     previous_code_by_file = (
         _prediction_code_by_file(previous_predictions_path)
@@ -111,6 +117,7 @@ def generate_iteration(
         else {}
     )
 
+    # Prepare local output directories for this iteration within the Modal volume.
     iter_dir = Path(DATA_DIR) / RUNS_DIR / run_id / f"iter_{iteration:02d}"
     generated_dir = iter_dir / "generated_scripts"
     records_dir = iter_dir / "generation_records"
@@ -131,8 +138,11 @@ def generate_iteration(
     )
 
     def _one(idx_item_file: tuple[int, dict[str, Any], str]) -> tuple[int, dict[str, Any]]:
+        """Worker function to process a single item (instruction) and call the LLM."""
         idx, item, file_name = idx_item_file
         feedback = previous_feedback_by_file.get(file_name)
+        # Determine the task mode: 'optimize' if we already have a passing kernel and are allowed to,
+        # otherwise default to 'correctness' to fix bugs or generate from scratch.
         task_mode = (
             "optimize"
             if (
@@ -154,6 +164,7 @@ def generate_iteration(
                 if item.get("iteration") != selected_feedback_iteration
             ]
         if max_feedback_history > 0:
+            # Keep only the most recent N feedback entries to prevent context window bloat.
             feedback_history = feedback_history[-max_feedback_history:]
         previous_code = previous_code_by_file.get(file_name)
         reference_context = (
@@ -161,6 +172,7 @@ def generate_iteration(
             if include_reference_source
             else ""
         )
+        # Construct the final prompt messages containing the instruction, previous code, and error feedback.
         messages = _build_messages(
             item=item,
             file_name=file_name,
@@ -177,6 +189,7 @@ def generate_iteration(
             json.dumps(messages, indent=2), encoding="utf-8"
         )
         try:
+            # Invoke the LLM endpoint and extract the raw Python module.
             raw = _llm_chat(
                 messages,
                 model=model,
@@ -192,6 +205,7 @@ def generate_iteration(
             code = f"# generation failed: {exc}\n"
             error = str(exc)
 
+        # Save the generated raw script locally.
         script_path = generated_dir / file_name
         script_path.parent.mkdir(parents=True, exist_ok=True)
         script_path.write_text(code, encoding="utf-8")
@@ -209,14 +223,18 @@ def generate_iteration(
             record["generation_error"] = error
         return idx, record
 
-    # First pass: reuse existing records or carry-forward passing kernels to avoid
-    # burning API quota on operators that already work. Only truly new or broken
-    # items end up in `pending` for the concurrent generation step.
+    # First pass: Resume/Carry-forward logic.
+    # To save time and API costs, we don't regenerate kernels that already work.
+    # - If we previously generated code for this item in this run, we resume it.
+    # - If we have working code from a prior iteration, we "carry it forward",
+    #   unless it hit a GPU fault or we are in 'optimize' mode and it's too slow.
     results: list[dict[str, Any] | None] = [None] * len(items)
     pending: list[tuple[int, dict[str, Any], str]] = []
     gpu_issue_regenerations = 0
     for idx, (item, file_name) in enumerate(zip(items, files)):
         record_path = records_dir / f"{idx:04d}.json"
+        
+        # If a record already exists for this run (e.g. resuming an interrupted run), load it.
         if record_path.exists() and not force_regenerate:
             record = json.loads(record_path.read_text(encoding="utf-8"))
             if retry_failed_records and record.get("generation_error"):
@@ -239,8 +257,11 @@ def generate_iteration(
                 and speedup is not None
                 and speedup >= target_speedup
             )
+            
             carry_forward = False
             carry_reason = ""
+            
+            # Evaluate whether this specific file's prior kernel should be carried forward.
             if previous_code and phase2_ok and not refine_passing and not gpu_issue:
                 if loop_mode == "correctness":
                     if (
@@ -269,6 +290,7 @@ def generate_iteration(
                     )
             elif previous_code and phase2_ok and gpu_issue:
                 gpu_issue_regenerations += 1
+                
             if (
                 previous_code
                 and not refine_passing
@@ -285,6 +307,7 @@ def generate_iteration(
                 }
                 results[idx] = record
                 record_path.write_text(json.dumps(record), encoding="utf-8")
+                
                 script_path = generated_dir / file_name
                 script_path.parent.mkdir(parents=True, exist_ok=True)
                 script_path.write_text(previous_code, encoding="utf-8")
@@ -306,7 +329,13 @@ def generate_iteration(
 
     done = 0
     started = time.monotonic()
+    
+    # Second pass: Concurrent generation.
+    # We use a ThreadPoolExecutor to make concurrent network requests to the LLM API.
+    # Since these requests are I/O bound (waiting for the model to reply), using threads
+    # provides massive speedups. 'concurrency' limits the maximum parallel requests.
     with ThreadPoolExecutor(max_workers=max(1, concurrency)) as executor:
+        # Submit all pending generation tasks to the thread pool.
         futures = [executor.submit(_one, item_file) for item_file in pending]
         for future in as_completed(futures):
             idx, record = future.result()
@@ -326,12 +355,14 @@ def generate_iteration(
             if done % max(1, checkpoint_every) == 0:
                 data_volume.commit()
 
+    # Write the compiled predictions.jsonl file expected by the TritonBench evaluation scripts.
     with predictions_path.open("w", encoding="utf-8") as handle:
         for record in results:
             if record is None:
                 raise RuntimeError("internal generation error: missing record")
             handle.write(json.dumps(record) + "\n")
 
+    # Save a manifest of the run configurations and output locations for record-keeping.
     manifest = {
         "run_id": run_id,
         "iteration": iteration,
