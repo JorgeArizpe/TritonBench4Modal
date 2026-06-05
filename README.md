@@ -1,6 +1,6 @@
-# TritonBench-T NVIDIA Iterative Runner
+# TritonBench-T Iterative Runner
 
-This repository runs TritonBench-T on Modal with an iterative NVIDIA
+This repository runs TritonBench-T on Modal with an iterative DashScope (Qwen)
 chat-completions generation, evaluation, and refinement loop. The app has been
 split into focused Python modules; the active local entrypoint is `main.py`.
 
@@ -15,8 +15,8 @@ iterations, and writes a final best-version prediction set.
 |-- main.py                 # Modal local entrypoint
 |-- modal_app.py            # Modal app, images, volume, local source packaging
 |-- config.py               # Shared constants, defaults, image patch commands
-|-- llm_secrets.py          # NVIDIA key and Modal Secret resolution
-|-- code_utils.py           # Prompting, NVIDIA API calls, code extraction, validation
+|-- llm_secrets.py          # DashScope API key and Modal Secret resolution
+|-- code_utils.py           # Prompting, LLM API calls, code extraction, validation
 |-- data_utils.py           # TritonBench data loading and file mapping
 |-- generation.py           # generate_iteration Modal function
 |-- evaluation.py           # evaluate_iteration Modal function
@@ -84,26 +84,25 @@ modal setup
 ```
 
 
-## NVIDIA Credentials
+## DashScope Credentials
 
-`llm_secrets.py` resolves NVIDIA credentials in this order:
+`llm_secrets.py` resolves DashScope credentials in this order:
 
-1. `NVIDIA_KEY` from the local environment.
-2. `NVIDIA_API_KEY` from the local environment.
-3. `NVIDIA_KEY` or `NVIDIA_API_KEY` from `.env` next to the Python modules.
-4. A Modal secret named by `TRITONBENCH_LLM_SECRET`, defaulting to
+1. `DASHSCOPE_API_KEY` from the local environment.
+2. `DASHSCOPE_API_KEY` from `.env` next to the Python modules.
+3. A Modal secret named by `TRITONBENCH_LLM_SECRET`, defaulting to
    `tritonbench-llm`.
 
 Example `.env`:
 
 ```text
-NVIDIA_KEY=nvapi-...
+DASHSCOPE_API_KEY=sk-...
 ```
 
 Example fallback Modal secret:
 
 ```bash
-modal secret create tritonbench-llm NVIDIA_KEY=nvapi-...
+modal secret create tritonbench-llm DASHSCOPE_API_KEY=sk-...
 ```
 
 Use a different Modal secret name with:
@@ -118,14 +117,14 @@ Defaults live in `config.py` and `generation.py`.
 
 | Setting | Default |
 | --- | --- |
-| Modal app name | `tritonbench-t-nvidia-iterative` |
+| Modal app name | `tritonbench-t-dashscope-iterative` |
 | TritonBench repo | `https://github.com/thunlp/TritonBench.git` |
 | Modal volume | `tritonbench-t-data` |
 | Remote data dir | `/data` |
 | Remote TritonBench repo dir | `/opt/TritonBench` |
-| Run directory | `nvidia_iterative_runs` |
+| Run directory | `dashscope_iterative_runs` |
 | GPU | `T4`, overridable with `TRITONBENCH_GPU` |
-| Model | `qwen/qwen3-coder-480b-a35b-instruct`, overridable with `NVIDIA_MODEL` |
+| Model | `qwen3-coder-flash`, overridable with `LLM_MODEL` |
 | Iterations | `3` |
 | Generation concurrency | `4` |
 | Max tokens | `4096` |
@@ -155,13 +154,13 @@ Defaults live in `config.py` and `generation.py`.
 | --- | --- |
 | `--dataset` | TritonBench-T Alpaca split: `simp` or `comp`. |
 | `--limit` | Number of items to run. `0` means all items. |
-| `--model` | NVIDIA model id. |
+| `--model` | DashScope model id. |
 | `--iterations` | Number of generate/evaluate/refine loops. |
-| `--concurrency` | Parallel NVIDIA generation requests. |
+| `--concurrency` | Parallel DashScope generation requests. |
 | `--max-tokens` | Maximum response tokens per generation request. |
-| `--temperature` | Sampling temperature for NVIDIA requests. |
-| `--request-timeout-seconds` | Read timeout for each NVIDIA request. |
-| `--retries` | Retry count for each NVIDIA request. |
+| `--temperature` | Sampling temperature for DashScope requests. |
+| `--request-timeout-seconds` | Read timeout for each DashScope request. |
+| `--retries` | Retry count for each DashScope request. |
 | `--checkpoint-every` | Modal volume commit frequency during generation. |
 | `--include-reference-source` | Include reference implementation/context in prompts. |
 | `--reference-source-char-limit` | Character limit for reference context. |
@@ -228,7 +227,7 @@ modules named `call_acc.py` and `exe_acc.py`.
 3. Builds prompts with `code_utils._build_messages`.
 4. Optionally includes reference context from the matching TritonBench file.
 5. Optionally includes previous code, prior feedback, and feedback history.
-6. Calls NVIDIA's chat-completions endpoint through `code_utils._nvidia_chat`.
+6. Calls DashScope's chat-completions endpoint through `code_utils._llm_chat`.
 7. Extracts/sanitizes generated Python code.
 8. Writes prompts, generated scripts, generation records, and `predictions.jsonl`.
 
@@ -320,7 +319,7 @@ The loop can carry forward already-correct kernels instead of regenerating them:
 Artifacts are written to the Modal volume `tritonbench-t-data`.
 
 ```text
-nvidia_iterative_runs/<run_id>/
+dashscope_iterative_runs/<run_id>/
 |-- iter_01/
 |   |-- predictions.jsonl
 |   |-- generation_manifest.json
@@ -344,7 +343,7 @@ nvidia_iterative_runs/<run_id>/
 
 Important files:
 
-- `prompts/*.json`: exact chat messages sent to NVIDIA.
+- `prompts/*.json`: exact chat messages sent to DashScope.
 - `generation_records/*.json`: per-file generation result and errors.
 - `generated_scripts/*.py`: extracted generated modules.
 - `predictions.jsonl`: TritonBench-compatible prediction rows.
@@ -378,7 +377,6 @@ Both scripts use only the Python standard library.
 
 - `main.py` is the active entrypoint.
 - The older monolithic scripts are archived under `misc/archive/`.
-- No `nvidia_iterative_modal_app.py` file exists in the current repo structure.
 
 ## References
 
