@@ -7,3 +7,4 @@ predictions/
 results/
 *.jsonl
 !examples/*.jsonl
+.claude
