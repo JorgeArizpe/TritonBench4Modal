@@ -30,7 +30,7 @@ _LOCAL_MODULES = [
     "formatting",
 ]
 
-# Generation only calls the NVIDIA API (no GPU needed), so it runs on a cheap CPU image.
+# Generation only calls the LLM API (no GPU needed), so it runs on a cheap CPU image.
 # Keeping it separate from the GPU image cuts cold-start time and avoids shipping
 # torch/triton to containers that don't benchmark anything.
 cpu_image = (

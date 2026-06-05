@@ -1,5 +1,5 @@
 """
-NVIDIA API secret resolution: local .env file with fallback to a Modal Secret.
+LLM API secret resolution: local .env file with fallback to a Modal Secret.
 """
 
 from __future__ import annotations
@@ -38,18 +38,12 @@ def _parse_dotenv(path: Path) -> dict[str, str]:
     return values
 
 
-def _nvidia_secret() -> modal.Secret:
+def _llm_secret() -> modal.Secret:
     env_values = _parse_dotenv(LOCAL_DOTENV_PATH)
-    secret_values: dict[str, str] = {}
-
-    for key in ("NVIDIA_KEY", "NVIDIA_API_KEY"):
-        value = os.environ.get(key) or env_values.get(key)
-        if value:
-            secret_values[key] = value
-
-    if secret_values:
-        return modal.Secret.from_dict(secret_values)
+    value = os.environ.get("DASHSCOPE_API_KEY") or env_values.get("DASHSCOPE_API_KEY")
+    if value:
+        return modal.Secret.from_dict({"DASHSCOPE_API_KEY": value})
     return modal.Secret.from_name(FALLBACK_SECRET_NAME)
 
 
-NVIDIA_SECRET = _nvidia_secret()
+LLM_SECRET = _llm_secret()

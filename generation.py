@@ -31,14 +31,14 @@ from config import (
     RUNS_DIR,
 )
 
-DEFAULT_USE_GUIDED_JSON = True
+DEFAULT_USE_GUIDED_JSON = False
 from modal_app import app, cpu_image, data_volume
-from llm_secrets import NVIDIA_SECRET
+from llm_secrets import LLM_SECRET
 from code_utils import (
     _build_messages,
     _extract_code,
     _gpu_issue_feedback,
-    _nvidia_chat,
+    _llm_chat,
     _phase2_passed,
     _speedup_value,
     _static_validate_code,
@@ -58,7 +58,7 @@ from data_utils import (
     timeout=60 * 60 * 4,
     cpu=4,
     volumes={DATA_DIR: data_volume},
-    secrets=[NVIDIA_SECRET],
+    secrets=[LLM_SECRET],
 )
 def generate_iteration(
     run_id: str,
@@ -177,7 +177,7 @@ def generate_iteration(
             json.dumps(messages, indent=2), encoding="utf-8"
         )
         try:
-            raw = _nvidia_chat(
+            raw = _llm_chat(
                 messages,
                 model=model,
                 max_tokens=max_tokens,

@@ -1,5 +1,5 @@
 """
-Prompt construction, NVIDIA API calls, code extraction, and static validation.
+Prompt construction, LLM API calls, code extraction, and static validation.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from config import (
     DEFAULT_RETRIES,
     DEFAULT_TARGET_SPEEDUP,
     DEFAULT_TEMPERATURE,
-    NVIDIA_INVOKE_URL,
+    LLM_INVOKE_URL,
 )
 
 # --------------------------------------------------------------------------- #
@@ -426,121 +426,108 @@ def _perf_feedback_lines(feedback: dict[str, Any]) -> list[str]:
 
 
 # --------------------------------------------------------------------------- #
-# NVIDIA API call
+# LLM API call
 # --------------------------------------------------------------------------- #
 
 
-def _nvidia_chat(
+def _llm_chat(
     messages: list[dict[str, str]],
     model: str,
     max_tokens: int,
     temperature: float,
     request_timeout_seconds: int,
     retries: int,
-    use_guided_json: bool = True,
+    use_guided_json: bool = False,
 ) -> str:
     import requests
 
-    api_key = os.environ.get("NVIDIA_KEY") or os.environ.get("NVIDIA_API_KEY")
+    api_key = os.environ.get("DASHSCOPE_API_KEY")
     if not api_key:
-        raise RuntimeError("NVIDIA_KEY or NVIDIA_API_KEY is not available in Modal")
+        raise RuntimeError("DASHSCOPE_API_KEY is not set")
 
-    base_payload = {
+    use_gj = use_guided_json and model not in _GUIDED_JSON_UNSUPPORTED
+    print(
+        f"  [LLM] key prefix={api_key[:12]}... model={model} guided_json={use_gj}",
+        flush=True,
+    )
+
+    payload: dict[str, Any] = {
         "model": model,
         "messages": messages,
         "max_tokens": max_tokens,
         "temperature": temperature,
-        "top_p": 1.0,
-        "frequency_penalty": 0.0,
-        "presence_penalty": 0.0,
-        "stream": True,
     }
+    if use_gj:
+        payload["guided_json"] = _CODE_OUTPUT_SCHEMA
+
     headers = {
         "Authorization": f"Bearer {api_key}",
-        "Accept": "text/event-stream",
         "Content-Type": "application/json",
     }
 
-    # guided_json is a vLLM-specific extension; not all NIM endpoints support it.
-    # On a 400 we record the model so future calls skip the attempt entirely, then
-    # retry without the server-side constraint and fall back to client-side XGrammar.
-    model_key = model.lower()
-    guided_json_active = use_guided_json and model_key not in _GUIDED_JSON_UNSUPPORTED
     last_error: Exception | None = None
     for attempt in range(retries):
-        payload = dict(base_payload)
-        if guided_json_active:
-            # Pass the compiled schema to the vLLM-backed NIM endpoint.
-            # XGrammar on the server enforces _CODE_OUTPUT_SCHEMA token-by-token,
-            # guaranteeing the response is valid JSON with a python_code field.
-            payload["extra_body"] = {"guided_json": _CODE_OUTPUT_SCHEMA}
         try:
             response = requests.post(
-                NVIDIA_INVOKE_URL,
+                LLM_INVOKE_URL,
                 headers=headers,
                 json=payload,
-                stream=True,
                 timeout=(30, request_timeout_seconds),
             )
-            # 400 with guided_json means the endpoint doesn't support it; cache the
-            # model so subsequent calls skip the attempt without burning a round-trip.
-            if response.status_code == 400 and guided_json_active:
-                _GUIDED_JSON_UNSUPPORTED.add(model_key)
-                guided_json_active = False
+
+            # If the endpoint doesn't support guided_json, fall back and retry
+            # the same request immediately (doesn't consume an attempt).
+            if response.status_code == 400 and use_gj:
+                _GUIDED_JSON_UNSUPPORTED.add(model)
+                use_gj = False
+                payload.pop("guided_json", None)
                 print(
-                    f"guided_json rejected by endpoint (400) for {model}; "
-                    "retrying without server-side constraint "
-                    "(will use client-side XGrammar validation instead)",
+                    f"  [LLM] guided_json rejected (400) for {model}; retrying without",
                     flush=True,
                 )
-                continue
-            # 408/409/429/5xx are transient; raising here lets the retry loop handle them.
+                response = requests.post(
+                    LLM_INVOKE_URL,
+                    headers=headers,
+                    json=payload,
+                    timeout=(30, request_timeout_seconds),
+                )
+
+            if response.status_code == 401:
+                raise RuntimeError(
+                    f"LLM API authentication failed (401): {_tail(response.text, 800)}\n"
+                    "Check that DASHSCOPE_API_KEY in .env is correct."
+                )
             if response.status_code in {408, 409, 429, 500, 502, 503, 504}:
                 raise RuntimeError(
-                    f"NVIDIA API retryable status {response.status_code}: "
+                    f"LLM API retryable status {response.status_code}: "
                     f"{_tail(response.text, 800)}"
                 )
             response.raise_for_status()
 
-            chunks: list[str] = []
-            for raw_line in response.iter_lines(decode_unicode=True):
-                if not raw_line:
-                    continue
-                line = raw_line.strip()
-                if line.startswith("data:"):
-                    line = line[len("data:") :].strip()
-                if line == "[DONE]":
-                    break
-                try:
-                    event = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-
-                choice = (event.get("choices") or [{}])[0]
-                delta = choice.get("delta") or {}
-                message = choice.get("message") or {}
-                content = delta.get("content") or message.get("content") or ""
-                if content:
-                    chunks.append(content)
-
-            text = "".join(chunks).strip()
+            data = response.json()
+            text = (data.get("choices") or [{}])[0].get("message", {}).get("content", "").strip()
             if not text:
-                raise RuntimeError("NVIDIA API returned an empty streamed response")
-            # When server-side XGrammar was requested but the endpoint didn't support
-            # it, validate the response client-side so the schema guarantee still holds.
-            if use_guided_json and not guided_json_active and not _xgrammar_validate(text):
-                raise RuntimeError(
-                    "XGrammar client-side validation failed: "
-                    "response does not conform to the JSON output schema; will retry"
+                raise RuntimeError("LLM API returned an empty response")
+
+            if use_gj and not _xgrammar_validate(text):
+                print(
+                    f"  [LLM] XGrammar validation failed; proceeding with best-effort extraction",
+                    flush=True,
                 )
+
             return text
+        except RuntimeError as exc:
+            last_error = exc
+            if "401" in str(exc):
+                break  # no point retrying auth failures
+            if attempt < retries - 1:
+                time.sleep(min(30, 2**attempt))
         except Exception as exc:  # noqa: BLE001
             last_error = exc
-            if attempt == retries - 1:
-                break
-            time.sleep(min(30, 2**attempt))
+            if attempt < retries - 1:
+                time.sleep(min(30, 2**attempt))
 
-    raise RuntimeError(f"NVIDIA generation failed: {last_error}")
+    raise RuntimeError(f"LLM generation failed: {last_error}")
 
 
 # --------------------------------------------------------------------------- #

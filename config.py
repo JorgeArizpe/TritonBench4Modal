@@ -1,5 +1,5 @@
 """
-Shared constants and defaults for the NVIDIA iterative TritonBench runner.
+Shared constants and defaults for the TritonBench iterative runner.
 """
 
 from __future__ import annotations
@@ -12,8 +12,7 @@ TRITONBENCH_REPO = "https://github.com/thunlp/TritonBench.git"
 
 DEFAULT_GPU = os.environ.get("TRITONBENCH_GPU", "T4")
 DEFAULT_MODEL = os.environ.get(
-    # "NVIDIA_MODEL", "mistralai/mistral-large-3-675b-instruct-2512"
-    "NVIDIA_MODEL", "qwen/qwen3-coder-480b-a35b-instruct"
+    "LLM_MODEL", "qwen3-coder-flash"
 )
 DEFAULT_ITERATIONS = 3
 DEFAULT_CONCURRENCY = 4
@@ -40,7 +39,7 @@ DATA_DIR = "/data"
 REPO_DIR = "/opt/TritonBench"
 RUNS_DIR = "nvidia_iterative_runs"
 
-NVIDIA_INVOKE_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+LLM_INVOKE_URL = "https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions"
 LOCAL_DOTENV_PATH = Path(__file__).with_name(".env")
 FALLBACK_SECRET_NAME = os.environ.get("TRITONBENCH_LLM_SECRET", "tritonbench-llm")
 
