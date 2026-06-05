@@ -8,12 +8,14 @@ from typing import Any
 
 
 def _fmt_optional_speedup(value: Any) -> str:
+    """Format a numerical speedup value to 4 significant digits (e.g., '1.234x')."""
     if isinstance(value, (int, float)):
         return f"{float(value):.4g}x"
     return "n/a"
 
 
 def _speedup_note(value: Any) -> str:
+    """Generate a human-readable note for relative speedup direction (faster vs slower)."""
     if not isinstance(value, (int, float)):
         return ""
     value = float(value)
@@ -25,6 +27,8 @@ def _speedup_note(value: Any) -> str:
 
 
 def _compact_text(value: Any, limit: int = 180) -> str:
+    """Flatten multi-line strings and truncate them to keep console output readable.
+    Used primarily for displaying error tracebacks inline."""
     if not value:
         return ""
     text = " ".join(str(value).split())
@@ -34,6 +38,8 @@ def _compact_text(value: Any, limit: int = 180) -> str:
 
 
 def _feedback_error_line(feedback: dict[str, Any] | None) -> str:
+    """Extract the most relevant error message from a feedback record, prioritizing
+    call (Phase 1), then exec (Phase 2), then perf (Phase 3)."""
     if not feedback:
         return ""
     for phase, key in (
@@ -48,6 +54,7 @@ def _feedback_error_line(feedback: dict[str, Any] | None) -> str:
 
 
 def _print_config(config: dict[str, Any]) -> None:
+    """Print the run configuration values to the console at startup."""
     print("\n=== Run configuration ===")
     for key in (
         "run_id",
@@ -67,6 +74,7 @@ def _print_config(config: dict[str, Any]) -> None:
 
 
 def _print_iteration_summary(summary: dict[str, Any]) -> None:
+    """Print a comprehensive summary of a single generation/evaluation iteration."""
     total = summary.get("total_predictions", 0)
     call_acc = summary.get("phase1_call_acc", {})
     exec_acc = summary.get("phase2_exec_acc", {})
@@ -92,6 +100,7 @@ def _print_iteration_summary(summary: dict[str, Any]) -> None:
         f"{phase3.get('reused_results', 0)} cached"
     )
 
+    # Print performance results individually for kernels that made it to Phase 3.
     per_file = phase3.get("per_file") or {}
     if per_file:
         print("performance:")
@@ -109,6 +118,7 @@ def _print_iteration_summary(summary: dict[str, Any]) -> None:
                 f"cases {record.get('num_cases')})"
             )
 
+    # Print concise error reasons for kernels that failed execution correctness.
     failed = []
     for file_name, item in sorted(feedback.items()):
         if item.get("phase2_exec_passed"):
@@ -125,6 +135,8 @@ def _print_iteration_summary(summary: dict[str, Any]) -> None:
 
 
 def _print_final_summary(final_summary: dict[str, Any]) -> None:
+    """Print the final cross-iteration summary, displaying the aggregate 
+    best metrics and the winning kernel version for each file."""
     best_iter = final_summary.get("best_iteration_as_whole")
     best_iter_summary = final_summary.get("best_iteration_summary", {})
     best_per_file = final_summary.get("best_per_file", {})
@@ -151,6 +163,7 @@ def _print_final_summary(final_summary: dict[str, Any]) -> None:
         f"mean speedup {_fmt_optional_speedup(best_per_file.get('mean_available_speedup_vs_pytorch'))}"
     )
 
+    # Detail which iteration was selected as the best for each individual operator.
     print("selected versions:")
     for file_name, item in sorted(selected.items()):
         result = item.get("result") or {}

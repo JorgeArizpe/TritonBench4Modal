@@ -14,6 +14,8 @@ from code_utils import _extract_code
 
 
 def _reload_volume() -> None:
+    """Force a reload of the Modal Volume to sync state across containers
+    and ensure the latest files are visible to the current worker."""
     from modal_app import data_volume
     try:
         data_volume.reload()
@@ -22,6 +24,7 @@ def _reload_volume() -> None:
 
 
 def _read_json_or_jsonl(path: Path) -> Any:
+    """Helper to read a file that might be either a single JSON array or JSONL lines."""
     text = path.read_text(encoding="utf-8")
     try:
         return json.loads(text)
@@ -30,6 +33,7 @@ def _read_json_or_jsonl(path: Path) -> Any:
 
 
 def _load_alpaca(dataset: str) -> list[dict[str, Any]]:
+    """Load the specified TritonBench Alpaca instruction dataset ('simp' or 'comp')."""
     if dataset not in {"simp", "comp"}:
         raise ValueError("dataset must be 'simp' or 'comp'")
     path = Path(REPO_DIR) / f"data/TritonBench_T_{dataset}_alpac_v1.json"
@@ -41,6 +45,7 @@ def _load_alpaca(dataset: str) -> list[dict[str, Any]]:
 
 @lru_cache(maxsize=1)
 def _tritonbench_metadata() -> list[dict[str, Any]]:
+    """Load and cache the global TritonBench-T metadata containing op descriptions and stats."""
     stats_path = Path(REPO_DIR) / "data/TritonBench_T_v1.jsonl"
     stats = _read_json_or_jsonl(stats_path)
     if not isinstance(stats, list):
@@ -50,10 +55,12 @@ def _tritonbench_metadata() -> list[dict[str, Any]]:
 
 @lru_cache(maxsize=1)
 def _metadata_by_file() -> dict[str, dict[str, Any]]:
+    """Index the TritonBench metadata by the target Python test file name."""
     return {item["file"]: item for item in _tritonbench_metadata()}
 
 
 def _reference_context_for_file(file_name: str, char_limit: int) -> str:
+    """Extract reference PyTorch implementations and notes to include in the LLM prompt."""
     # Each reference file in TritonBench_T_v1 embeds the reference PyTorch implementation
     # above the 146-`#` delimiter and the test harness below it; we only want the former.
     delimiter = "#" * 146
@@ -65,14 +72,18 @@ def _reference_context_for_file(file_name: str, char_limit: int) -> str:
         if reference_source.strip():
             parts.append(reference_source.strip())
 
+    # Include the raw PyTorch code snippet from the metadata JSONL if available.
     metadata = _metadata_by_file().get(file_name, {})
     torch_code = metadata.get("torch_code")
     if torch_code:
         parts.append("# Reference torch operation sequence:\n" + str(torch_code).strip())
+    
+    # Include any additional semantic notes provided by the TritonBench dataset.
     other = metadata.get("other")
     if other:
         parts.append("# Additional semantic notes:\n" + str(other).strip())
 
+    # Combine and truncate to avoid blowing up the LLM context window.
     context = "\n\n".join(parts).strip()
     if char_limit > 0 and len(context) > char_limit:
         context = context[:char_limit] + "\n# ... reference context truncated ..."
@@ -80,6 +91,8 @@ def _reference_context_for_file(file_name: str, char_limit: int) -> str:
 
 
 def _description_from_instruction(instruction: str) -> str:
+    """Parse the 'Functional Description' section out of the raw Alpaca instruction text,
+    which is used to reverse-map instructions back to their metadata records."""
     if "Functional Description: " not in instruction:
         return ""
     return (
@@ -90,6 +103,7 @@ def _description_from_instruction(instruction: str) -> str:
 
 
 def _files_for_instructions(instructions: list[str]) -> list[str]:
+    """Map a list of raw instructions to their corresponding TritonBench test filenames."""
     stats = _tritonbench_metadata()
 
     files: list[str] = []
@@ -110,11 +124,13 @@ def _files_for_instructions(instructions: list[str]) -> list[str]:
 
 
 def _safe_write_json(path: Path, value: Any) -> None:
+    """Write a JSON file safely by creating any necessary parent directories first."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, sort_keys=True), encoding="utf-8")
 
 
 def _load_predictions(path: Path) -> list[dict[str, Any]]:
+    """Load a generated predictions.jsonl file into a list of records."""
     return [
         json.loads(line)
         for line in path.read_text(encoding="utf-8").splitlines()
@@ -123,6 +139,8 @@ def _load_predictions(path: Path) -> list[dict[str, Any]]:
 
 
 def _prediction_code_by_file(predictions_path: str) -> dict[str, str]:
+    """Load a predictions file and extract the generated Python code, indexed by the target 
+    TritonBench test filename."""
     full_path = Path(DATA_DIR) / predictions_path
     if not full_path.exists():
         return {}

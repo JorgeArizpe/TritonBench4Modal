@@ -23,8 +23,13 @@ def _score_feedback(
     feedback: dict[str, Any] | None,
     iteration: int,
 ) -> tuple[int, float, int, int, int]:
-    # Lexicographic priority: execution correctness > accepted speedup > call accuracy
-    # > static validity > later iteration (tie-break so the newest correct version wins).
+    """
+    Score a candidate kernel version to allow sorting and selection of the best one.
+    
+    Lexicographic priority: 
+    1. execution correctness > 2. accepted speedup > 3. call accuracy
+    > 4. static validity > 5. later iteration (tie-break so the newest correct version wins).
+    """
     if not feedback:
         return (0, -1.0, 0, 0, iteration)
     phase2 = 1 if feedback.get("phase2_exec_passed") else 0
@@ -48,12 +53,14 @@ def materialize_best_versions(
     run_id: str,
     iteration_summaries: list[dict[str, Any]],
 ) -> dict[str, Any]:
+    # Prepare the output directory for the best collective predictions.
     _reload_volume()
     run_dir = Path(DATA_DIR) / RUNS_DIR / run_id
     best_dir = run_dir / "best"
     best_generated_dir = best_dir / "generated_scripts"
     best_generated_dir.mkdir(parents=True, exist_ok=True)
 
+    # Collect the highest scoring candidate for each file across all iterations.
     by_file: dict[str, dict[str, Any]] = {}
     for summary in iteration_summaries:
         iteration = summary["iteration"]
@@ -71,14 +78,17 @@ def materialize_best_versions(
                 "score": _score_feedback(feedback, iteration),
             }
             current = by_file.get(file_name)
+            # Replace the current best if this new candidate has a higher score.
             if current is None or candidate["score"] > current["score"]:
                 by_file[file_name] = candidate
 
+    # Write out the selected best predictions and export their raw python scripts.
     best_predictions_path = best_dir / "best_predictions.jsonl"
     with best_predictions_path.open("w", encoding="utf-8") as handle:
         for file_name in sorted(by_file):
             candidate = by_file[file_name]
             record = candidate["record"]
+            # Extract clean code to store in the 'generated_scripts' folder for easy viewing.
             code = _extract_code(record.get("predict", ""))
             best_script_path = best_generated_dir / file_name
             best_script_path.parent.mkdir(parents=True, exist_ok=True)
@@ -92,6 +102,7 @@ def materialize_best_versions(
             }
             handle.write(json.dumps(best_record) + "\n")
 
+    # Identify the single best overall iteration based on aggregate correctness and efficiency.
     best_iteration = max(
         iteration_summaries,
         key=lambda item: (
@@ -100,6 +111,7 @@ def materialize_best_versions(
             item["phase1_call_acc"]["passed"],
         ),
     )
+    # Aggregate the performance and correctness metrics for the synthetic "best" dataset.
     best_exec_count = sum(
         1
         for candidate in by_file.values()
@@ -113,6 +125,7 @@ def materialize_best_versions(
         and isinstance(candidate["feedback"].get("speedup_vs_pytorch"), (int, float))
     ]
 
+    # Assemble a comprehensive summary of the cross-iteration selection process.
     final_summary = {
         "run_id": run_id,
         "best_predictions_path": str(best_predictions_path.relative_to(DATA_DIR)),

@@ -22,7 +22,11 @@ from code_utils import _tail
 
 
 def _run_python_file(path: Path, gpu_id: int, timeout_seconds: int) -> dict[str, Any]:
+    """Execute a Python script in an isolated subprocess.
+    Pins the visible GPU to `gpu_id` to prevent multi-GPU containers from leaking state,
+    and enforces a strict timeout to kill hanging Triton compilations or infinite loops."""
     def _text(value: str | bytes | None) -> str:
+        # Decode stdout/stderr safely, replacing invalid unicode characters if necessary.
         if value is None:
             return ""
         if isinstance(value, bytes):
@@ -55,6 +59,8 @@ def _run_python_file(path: Path, gpu_id: int, timeout_seconds: int) -> dict[str,
 
 
 def _combined_output_tail(run_result: dict[str, Any]) -> str:
+    """Extract the tail of stdout and stderr from a subprocess result, 
+    useful for displaying concise error messages in the console or LLM prompt."""
     parts = []
     if run_result.get("timed_out"):
         parts.append("Timed out.")
@@ -68,6 +74,7 @@ def _combined_output_tail(run_result: dict[str, Any]) -> str:
 
 
 def _subprocess_text(result: subprocess.CompletedProcess[str]) -> str:
+    """Format a subprocess CompletedProcess object into a readable string block."""
     parts = [f"returncode: {result.returncode}"]
     if result.stdout:
         parts.append("[stdout]\n" + result.stdout)
@@ -82,6 +89,8 @@ def _subprocess_text(result: subprocess.CompletedProcess[str]) -> str:
 
 
 def _perf_json_candidates(perf_results_dir: Path, file_name: str) -> list[Path]:
+    """Depending on how the TritonBench runner writes output, the JSON file might
+    be named exactly after the script or have a `_perf.json` suffix."""
     stem = Path(file_name).stem
     return [
         perf_results_dir / f"{stem}.json",
@@ -90,6 +99,8 @@ def _perf_json_candidates(perf_results_dir: Path, file_name: str) -> list[Path]:
 
 
 def _perf_file_name_from_json(gen_path: Path) -> str:
+    """Reverse-map a generated performance JSON filename back to the original 
+    TritonBench Python script filename."""
     stem = gen_path.stem
     if stem.endswith("_perf"):
         stem = stem[: -len("_perf")]
@@ -97,6 +108,8 @@ def _perf_file_name_from_json(gen_path: Path) -> str:
 
 
 def _matching_golden_path(gen_path: Path) -> Path | None:
+    """Find the official TritonBench reference JSON for the given generated JSON,
+    allowing us to compare our generated kernel's speed against PyTorch."""
     ref_dir = Path(REPO_DIR) / "performance_metrics/perf_T/golden_results"
     candidates = [ref_dir / gen_path.name]
     if gen_path.stem.endswith("_perf"):
@@ -108,6 +121,8 @@ def _matching_golden_path(gen_path: Path) -> Path | None:
 
 
 def _extract_perf_rows(data: Any) -> list[dict[str, Any]]:
+    """Normalize the differing JSON structures produced by TritonBench into a 
+    flat list of benchmark records."""
     if isinstance(data, list):
         return [item for item in data if isinstance(item, dict)]
     if isinstance(data, dict):
@@ -119,6 +134,7 @@ def _extract_perf_rows(data: Any) -> list[dict[str, Any]]:
 
 
 def _perf_ms(row: dict[str, Any]) -> float | None:
+    """Extract the latency (in milliseconds) from a benchmark record."""
     for key in ("ms", "median_ms", "mean_ms", "avg_ms", "latency_ms"):
         value = row.get(key)
         if isinstance(value, (int, float)):
@@ -127,6 +143,8 @@ def _perf_ms(row: dict[str, Any]) -> float | None:
 
 
 def _input_key(row: dict[str, Any]) -> str | None:
+    """Extract a normalized string representation of the input tensor shapes/sizes
+    to use as a matching key between generated and reference benchmarks."""
     for key in ("input_size", "size", "shape", "input_shape"):
         if key in row:
             return json.dumps(row[key], sort_keys=True, default=str)
@@ -136,9 +154,13 @@ def _input_key(row: dict[str, Any]) -> str | None:
 def _align_perf_rows(
     gen_rows: list[dict[str, Any]], ref_rows: list[dict[str, Any]]
 ) -> tuple[list[tuple[dict[str, Any], dict[str, Any]]], str]:
+    """Match generated benchmark results with their corresponding PyTorch reference results."""
+    # Fast path: if the lists are the same length, assume they are parallel in order.
     if len(gen_rows) == len(ref_rows):
         return list(zip(gen_rows, ref_rows)), "same_length"
 
+    # Fallback: if lengths differ (e.g. a timeout cut the generated run short),
+    # align them by matching their input shape signatures.
     ref_by_key = {
         key: row
         for row in ref_rows
@@ -158,6 +180,10 @@ def _align_perf_rows(
 
 
 def _analyze_perf_results(perf_results_dir: Path) -> dict[str, dict[str, Any]]:
+    """
+    Parse all performance JSON files in the given directory, compare them to the golden
+    PyTorch references, and compute aggregate speedups.
+    """
     analysis: dict[str, dict[str, Any]] = {}
 
     for gen_path in sorted(perf_results_dir.rglob("*.json")):
@@ -217,6 +243,8 @@ def _analyze_perf_results(perf_results_dir: Path) -> dict[str, dict[str, Any]]:
             )
             continue
 
+        # Calculate speedup for each aligned benchmark case (often varying by tensor shape)
+        # and aggregate them to determine the overall efficiency.
         gen_ms_values: list[float] = []
         ref_ms_values: list[float] = []
         case_details: list[dict[str, Any]] = []
@@ -268,6 +296,7 @@ def _analyze_perf_results(perf_results_dir: Path) -> dict[str, dict[str, Any]]:
         record["speedup_vs_pytorch"] = speedup
         # TritonBench's 2_efficiency.py only counts speedups in (0.1, 10); values outside
         # that range are treated as measurement artifacts and excluded from the aggregate.
+        # We mirror that logic here to ensure our evaluations align with the official script.
         if 0.1 < speedup < 10:
             record["status"] = "accepted"
             record["message"] = "Speedup accepted by TritonBench range filter."
@@ -286,6 +315,8 @@ def _perf_failure_details(
     file_name: str,
     perf_analysis: dict[str, dict[str, Any]] | None = None,
 ) -> str:
+    """Construct a detailed human-readable summary of why a generated kernel failed 
+    to produce a valid, accepted speedup during Phase 3."""
     if perf_analysis and file_name in perf_analysis:
         record = perf_analysis[file_name]
         return (
@@ -300,6 +331,7 @@ def _perf_failure_details(
         (path for path in _perf_json_candidates(perf_results_dir, file_name) if path.exists()),
         perf_results_dir / file_name.replace(".py", ".json"),
     )
+    # Differentiate between a total crash (no file) and a partial crash (empty/unparseable file).
     if not result_path.exists():
         return f"{result_path.name} was not produced by the performance runner."
     try:
@@ -319,6 +351,7 @@ def _perf_failure_details(
 
 
 def _speedups_by_file(perf_results_dir: Path) -> dict[str, float]:
+    """Convenience helper to extract just the accepted speedups mapped by filename."""
     return {
         file_name: record["speedup_vs_pytorch"]
         for file_name, record in _analyze_perf_results(perf_results_dir).items()
@@ -333,12 +366,15 @@ def _speedups_by_file(perf_results_dir: Path) -> dict[str, float]:
 
 
 def _chunks(values: list[str], size: int) -> list[list[str]]:
+    """Split a list into smaller lists of length `size` for batch processing."""
     if size <= 0 or size >= len(values):
         return [values]
     return [values[idx : idx + size] for idx in range(0, len(values), size)]
 
 
 def _merge_perf_outputs(source_dir: Path, dest_dir: Path) -> None:
+    """Copy performance JSON files from a completed batch's output directory
+    into the main phase3 output directory."""
     for path in source_dir.rglob("*.json"):
         relative = path.relative_to(source_dir)
         target = dest_dir / relative
@@ -352,6 +388,11 @@ def _run_perf_batch(
     batch_results_dir: Path,
     file_names: list[str],
 ) -> str:
+    """
+    Execute a single isolated batch of performance benchmarks.
+    Batching prevents a single out-of-bounds GPU fault from crashing the evaluator
+    container and taking down the entire iteration's performance test results with it.
+    """
     batch_input_dir = batch_results_dir.parent / "input"
     if batch_input_dir.exists():
         shutil.rmtree(batch_input_dir)
@@ -364,6 +405,8 @@ def _run_perf_batch(
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
 
+    # Step 1: TritonBench's write_file.py parses the input scripts and generates
+    # a wrapper file configured for multiprocess benchmarking.
     write_file_run = subprocess.run(
         [
             sys.executable,
@@ -378,6 +421,7 @@ def _run_perf_batch(
         text=True,
         check=False,
     )
+    # Step 2: Actually execute the benchmarking harness on the GPU.
     runner_run = subprocess.run(
         [sys.executable, "run_bench/multiprocess_gpu_run.py"],
         cwd=perf_root,
