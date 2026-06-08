@@ -8,3 +8,4 @@ results/
 *.jsonl
 !examples/*.jsonl
 .claude
+.vscode/
